@@ -18,6 +18,8 @@
 % 其他常用宏包
 \usepackage{graphicx} % 插入图片
 \usepackage{booktabs} % 表格
+\usepackage{amssymb,amsmath} % 数学符号
+\usepackage{mathrsfs} % 数学花体字母
 \usepackage{hyperref} % 超链接
 
 % 修改目录样式，去掉圆圈
@@ -867,6 +869,154 @@ H_{v}=\frac{1}{A},G_{m}=\frac{1}{B},R_{m}=\frac{1}{C},H_{i}=\frac{1}{D}
 $$
 得到总的传递函数。
     }
+\end{frame}
+\begin{frame}{网络参量}
+    \begin{block}{求如下网络的电压传递函数$H_v$.}
+        \begin{figure}
 
+            \centering
+            \resizebox{.3\textwidth}{!}{%
+            \begin{circuitikz}
+                \draw(0,3)to[american voltage source,l_={ \LARGE $V_{in}$}](0,0)node[ground]{};
+                \draw(0,3)to[C,l={ \LARGE $C_1$}](3,3)to[R,l={ \LARGE $R_1$}](3,0)node[ground]{};
+                \draw(3,3)to[R,l={ \LARGE $R_2$}](6,3)to[C,l={ \LARGE $C_2$}](6,0)node[ground]{};
+                \draw(6,3)to[short,-o]++(1.5,0)node[right]{\LARGE $V_{out}$};
+            \end{circuitikz}
+            }
+        \end{figure}
+    \end{block}
+    \pause
+    \begin{block}{解答}
+        $$
+        \begin{aligned}
+        \begin{bmatrix}
+            A & B \\
+            C & D
+        \end{bmatrix}&=
+        \begin{bmatrix}
+            1 & \frac{1}{s C_1} \\
+            0 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 0 \\
+            \frac{1}{R_1} & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & \frac{1}{R} \\
+            0 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 0 \\
+            s C_2 & 1
+        \end{bmatrix}\\&=\begin{bmatrix}
+            1+\frac{C_2R_2}{C_1R_1}+\frac{1}{sC_1R_1}+sC_2R_2+\frac{C_2}{C_1} &\ast\\
+            \ast & \ast
+        \end{bmatrix}
+        \end{aligned}
+        $$
+        $$
+        H_v=\frac{1}{A}=\frac{1}{s^2C_2R_2+(1+\frac{C_2R_2}{C_1R_1}+\frac{C_2}{C_1})s+\frac{1}{C_1R_1}}
+        $$
+    \end{block}
+    \uncover<3->{\tikz[remember picture,overlay]\node[anchor=north east,fill=white,text=red,font=\small] at ([yshift=-0.7cm]current page.north east) {检查量纲：$[j\omega]=[s]=s^{-1}, [RC]=[GL]=s$};}
+\end{frame}
+\begin{frame}{时域分析}
+    在《信号与系统》中，我们将会学习如何严谨推导出所谓的时频对应关系和各种要素法。\pause 诚然，三要素五要素这些都是记忆微分方程的解，而这些微分方程可以利用\emph{Laplace}变换
+    $$\mathscr{L}\{x(t)\}=X(s)=\int_0^\infty x(t)\mathrm{e}^{-st}\mathrm{d}t$$
+    得到其解，因此三要素和五要素法在数学上是“不本质的”。然而，在电路中，研究系统的时域响应如何受到各种要素的影响反而是物理上“本质”的。因此学习时可以\textcolor{red}{\textbf{多留意各种要素是如何获得的、由谁决定、如何影响总体响应}}，这样或许有利于所谓“电路感觉”的培养。
+    \pause
+
+    \vspace{0.5cm}
+    私以为研究变换域复平面上的几何、在电路中观察主极点、写出具体表达式乃至打开\texttt{cadence}都可以等价地给出我们需要的各种信息，这些方法也不应该有高下之分。
+\end{frame}
+\begin{frame}{时域分析}
+    对于一阶系统采用三要素法
+    $$
+    X(j\omega)=\frac{\ast}{1+\tau\omega}\Rightarrow x(t)=\left(x(0)-x_\infty(0)\right)\mathrm{e}^{-\frac{t}{\tau}}+x_\infty(t)
+    $$
+    $$
+    \begin{cases}
+        \tau\,:\text{时间常数}\\
+        x_\infty(t)\,:\text{稳态响应}\\
+        x(0)\,:\text{初始条件}
+    \end{cases}
+    $$
+    其中：
+    \begin{itemize}
+        \item $\tau$由电路直接给出，比如常见的$\tau=RC, \frac{L}{R}$等。注意这里$R$是电容/电感\textcolor{red}{\textbf{看到}}的等效电阻。
+        \item $x_\infty(t)$由稳态分析得到。常见：\textcolor{red}{\textbf{直流稳态}}（电感短路，电容开路）、\textcolor{red}{\textbf{正弦稳态}}（使用相量法分析）。
+        \item $x(0)$由初始条件给出，需要列\textcolor{red}{\textbf{瞬时电路方程}}求解（利用电感电流不突变，电容电压不突变）。
+    \end{itemize}
+\end{frame}
+\begin{frame}{时域分析}
+    对于二阶系统采用五要素法
+    $$
+    X(s)=\frac{\ast}{s^2+2\xi\omega_0s+\omega_0^2}
+    $$
+    \resizebox{1\textwidth}{!}{%
+    $\displaystyle
+    x(t)=\begin{cases}
+        x_\infty(t)+\textcolor{red}{\left(x(0)-x_\infty(0)\right)\mathrm{e}^{-\xi\omega_0 t}\cos\sqrt{1-\xi^2}\omega_0t} \\
+        \quad+\textcolor{blue}{\left(x(0)-x_\infty(0)+\frac{\dot{x}(0)-\dot{x}_\infty(0)}{\xi\omega_0}\right)\frac{\xi}{1-\xi^2}\mathrm{e}^{-\xi\omega_0 t}\sin\sqrt{1-\xi^2}\omega_0t}  & 0<\xi<1\\
+        x_\infty(t)+\textcolor{red}{\left(x(0)-x_\infty(0)\right)\mathrm{e}^{-\omega_0 t}}+\textcolor{blue}{\left(x(0)-x_\infty(0)+\frac{\dot{x}(0)-\dot{x}_\infty(0)}{\omega_0}\right)\omega_0t\mathrm{e}^{-\omega_0 t}} & \xi=1\\
+        x_\infty(t)+\textcolor{red}{\left(x(0)-x_\infty(0)\right)\mathrm{e}^{-\xi\omega_0 t}\cosh\sqrt{\xi^2-1}\omega_0t} \\
+        \quad+\textcolor{blue}{\left(x(0)-x_\infty(0)+\frac{\dot{x}(0)-\dot{x}_\infty(0)}{\xi\omega_0}\right)\frac{\xi}{\xi^2-1}\mathrm{e}^{-\xi\omega_0 t}\sinh\sqrt{\xi^2-1}\omega_0t} & \xi>1\\
+    \end{cases}
+    $
+    }
+    \begin{itemize}
+        \item $\omega_0$,$\xi$由电路直接给出,对于简单电路$\omega_0=\frac{1}{\sqrt{LC}}$,$\xi=\frac{R}{2}\sqrt{\frac{C}{L}}$；复杂电路直接抓传递函数，分母化简为$s^2+2\xi\omega_0s+\omega_0^2$获得。
+        \item $x_\infty(t)$由稳态分析得到。常见：\textcolor{red}{\textbf{直流稳态}}（电感短路，电容开路）、\textcolor{red}{\textbf{正弦稳态}}（使用相量法分析）。
+        \item $x(0), \dot{x}(0)$由初始条件给出，$x(0)$需要列\textcolor{red}{\textbf{瞬时电路方程}}求解（利用电感电流不突变，电容电压不突变）;$\dot{x}(0)$可以通过\textcolor{red}{\textbf{瞬变量电路方程}}求解（利用电感电流不突变，电容电压不突变）;
+    \end{itemize}
+    
+\end{frame}
+
+
+\begin{frame}{时域分析}
+    \begin{block}{例题}
+        
+            
+            如图，$V_{s0}=5\mathrm{V}$，$R_S=100\Omega$, $R_L=1\mathrm{k}\Omega$, $L_1=1\mathrm{\mu H}$, $L_2=4\mathrm{\mu H}$, $M=0.8\mathrm{\mu H}$.
+            \begin{columns}
+            \column{.6\textwidth}
+            \begin{enumerate}
+                \item  若$t<0$，开关闭合，而$t=0$时开关断开，求$t>0$时$v_{o}(t)$。
+                \item 若$t<0$，开关断开，而$t=0$时开关闭合，求$t>0$时$v_{o}(t)$。
+            \end{enumerate}
+            \column{.4\textwidth}
+            \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (6.25,11) to[american voltage source,l={ \LARGE $V_{S0}$}] (6.25,8.5);
+\draw (6.25,11) to[R,l={ \LARGE $R_S$}] (8.75,11);
+\draw (8.75,11) to[normal open switch,l={ \LARGE $K$}] (10,11);
+\draw (10,11) to[L ] (10,8.5);
+\draw (11.25,8.5) to[L ] (11.25,11);
+\draw (12.5,11) to[R,l={ \LARGE $R_L$}] (12.5,8.5);
+\draw (6.25,8.5) to[short] (10,8.5);
+\draw (11.25,11) to[short] (12.5,11);
+\draw (11.25,8.5) to[short] (12.5,8.5);
+\node [font=\LARGE] at (9.5,9.75) {$L_1$};
+\node [font=\LARGE] at (11.75,9.75) {$L_2$};
+\node at (10.25,10.75) [circ] {};
+\node at (11,10.75) [circ] {};
+\node [font=\LARGE] at (10.75,11.25) {$M$};
+\draw (12.5,11) to[short, -o] (13.75,11) ;
+\node [font=\LARGE] at (14.25,11) {$v_o$};
+\draw (11.75,8.5) to (11.75,8.25) node[ground]{};
+\end{circuitikz}
+}%
+\pause
+
+\end{figure}
+\vspace{.4cm}
+        \end{columns}
+    \end{block}
+\begin{block}{提示}
+    利用变压器的等效电路化简，然后看是几要素法。
+\end{block}
 \end{frame}
 \end{document}
