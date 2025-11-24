@@ -967,7 +967,7 @@ $$
     \begin{itemize}
         \item $\omega_0$,$\xi$由电路直接给出,对于简单电路$\omega_0=\frac{1}{\sqrt{LC}}$,$\xi=\frac{R}{2}\sqrt{\frac{C}{L}}$；复杂电路直接抓传递函数，分母化简为$s^2+2\xi\omega_0s+\omega_0^2$获得。
         \item $x_\infty(t)$由稳态分析得到。常见：\textcolor{red}{\textbf{直流稳态}}（电感短路，电容开路）、\textcolor{red}{\textbf{正弦稳态}}（使用相量法分析）。
-        \item $x(0), \dot{x}(0)$由初始条件给出，$x(0)$需要列\textcolor{red}{\textbf{瞬时电路方程}}求解（利用电感电流不突变，电容电压不突变）;$\dot{x}(0)$可以通过\textcolor{red}{\textbf{瞬变量电路方程}}求解（利用电感电流不突变，电容电压不突变）;
+        \item $x(0), \dot{x}(0)$由初始条件给出，$x(0)$需要列\textcolor{red}{\textbf{瞬时电路方程}}求解（利用电感电流不突变，电容电压不突变）;$\dot{x}(0)$可以通过\textcolor{red}{\textbf{瞬变量电路方程}}求解（利用电感微分电流是电压，电容微分电压是电流）;
     \end{itemize}
     
 \end{frame}
@@ -1019,4 +1019,181 @@ $$
     利用变压器的等效电路化简，然后看是几要素法。
 \end{block}
 \end{frame}
+\begin{frame}{时域分析}
+    \uncover<5->{\tikz[remember picture,overlay]\node[anchor=north east,fill=white,text=red,font=\small] at ([yshift=-0.7cm]current page.north east) {注意使用阻抗变换时电压电流等也要乘除变压比！！};}
+    \begin{block}{解答(1)}
+        \begin{columns}
+        \column{.6\textwidth}
+        使用漏磁励磁模型替换变压器：
+        \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (3.75,17.25) to[american voltage source,l={ \LARGE $V_{S0}$}] (3.75,14.75);
+\draw (3.75,17.25) to[R,l={ \LARGE $R_S$}] (6.25,17.25);
+\draw (10,17.25) to[L ] (10,14.75);
+\draw (11.25,14.75) to[L ] (11.25,17.25);
+\draw (14.5,17.25) to[R,l={ \LARGE $R_L$}] (14.5,14.75);
+\draw (3.75,14.75) to[short] (10,14.75);
+\draw (11.25,17.25) to[short] (14.5,17.25);
+\draw (11.25,14.75) to[short] (14.5,14.75);
+\node [font=\LARGE] at (9.5,16) {$\infty$};
+\node [font=\LARGE] at (11.75,16) {$\infty$};
+\node at (10.25,17) [circ] {};
+\node at (11,17) [circ] {};
+\node [font=\LARGE] at (10.75,17.75) {$M:L_2$};
+\draw (14.5,17.25) to[short, -o] (15.75,17.25) ;
+\node [font=\LARGE] at (16.25,17.25) {$v_o$};
+\draw (11.75,14.75) to (11.75,14.5) node[ground]{};
+
+\draw (7.5,17.25) to[L,l={ \LARGE $L_1$} ] (10,17.25);
+\draw (6.25,17.25) to[opening switch] (7.5,17.25);
+\draw (12.75,17.25) to[L,l={ \LARGE $L_2$} ] (12.75,14.75);
+\end{circuitikz}
+}%
+\end{figure}
+        \pause
+        \column{.4\textwidth}
+    进而利用阻抗变换得到：
+\vspace{-0.5cm}
+    \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (3.75,17.25) to[american voltage source,l={ \LARGE $V_{S0}$}] (3.75,14.75);
+\draw (3.75,17.25) to[R,l={ \LARGE $R_S$}] (6.25,17.25);
+\draw (11,17.25) to[R,l={ \LARGE $R_L'$}] (11,14.75);
+\draw (3.75,14.75) to[short] (11,14.75);
+\draw (10,17.25) to[short, -o] (11.25,17.25) ;
+\node [font=\LARGE] at (12,17.5) {$v'_o$};
+\draw (10.25,14.75) to (10.25,14.5) node[ground]{};
+
+\draw (7.5,17.25) to[L,l={ \LARGE $L_1$} ] (10,17.25);
+\draw (6.25,17.25) to[opening switch] (7.5,17.25);
+\draw (9.5,17.25) to[L,l={ \LARGE $L_2'$} ] (9.5,14.75);
+\end{circuitikz}
+}%
+\end{figure}
+    \end{columns}
+    \pause
+    则$L_2'=\left(\frac{M}{L_2}\right)^2L_2=\frac{M^2}{L_2}, R_L'=\left(\frac{M}{L_2}\right)^2R_L=\frac{M^2}{L_2^2}R_L$，$\tau=\frac{L_2'}{R_L'}=\frac{L_2}{R_L}$。
+    \pause
+
+    \textbf{稳态分析}：开关闭合很久，电感短路，${v'_o}_\infty(t)=0$。
+    \pause
+
+    \textbf{瞬时分析}：开关刚刚闭合时，电感电流不变，$i_{L_2'}(0)=i_{L_2'}(0-)=\frac{V_{s0}}{R_S}$, 进而${v'_o}(0)=\textcolor{red}{-}i_{L_2'}(0)R_L'=\textcolor{red}{-}\frac{M^2}{L_2^2}\frac{R_L}{R_S}V_{s0}$.
+
+    \pause
+
+    \textbf{三要素法}：
+    $
+    v_{o}(t)=\frac{L_2}{M}v'_o(t)=-\frac{M}{L_2}\frac{R_L}{R_S}V_{s0}\mathrm{e}^{-\frac{R_L}{L_2}t}=\boxed{-10\mathrm{V}\cdot \mathrm{e}^{-t/(4\times 10^{-9}s)}}
+    $
+    \end{block}
+    
+\end{frame}
+\begin{frame}{时域分析}
+    \begin{block}{解答(2)}
+        \begin{columns}
+            \column{0.5\textwidth}
+            \only<1-11>{使用T模型对电路进行化简}
+            \only<12->{$\omega_0=1.73\times10^8s^{-1}, \xi=1.21$
+            \vspace{-0.6cm}
+            }
+            
+            \begin{figure}[!ht]
+            \centering
+    \resizebox{1\textwidth}{!}{%
+    \begin{circuitikz}
+    \tikzstyle{every node}=[font=\LARGE]
+    \draw (3.75,17.25) to[american voltage source,l={ \LARGE $V_{S0}$}] (3.75,14.75);
+    \draw (3.75,17.25) to[R,l={ \LARGE $R_S$}] (6.25,17.25);
+    \draw (12.5,17.25) to[R,l={ \LARGE $R_L$}] (12.5,14.75);
+    \draw (3.75,14.75) to[short] (10,14.75);
+    \draw (12.5,17.25) to[short, -o] (13.75,17.25) ;
+    \node [font=\LARGE] at (14.25,17.5) {$v_o$};
+    \draw (11.75,14.75) to (11.75,14.5) node[ground]{};
+
+    \draw (7.5,17.25) to[L,l={ \LARGE $L_1-M$} ] (10,17.25);
+    \draw (10,17.25) to[L,l={ \LARGE $M$} ] (10,14.75);
+    \draw (10,17.25) to[L,l={ \LARGE $L_2-M$} ] (12.5,17.25);
+    \draw (9.75,14.75) to[short] (12.5,14.75);
+    \draw (6.25,17.25) to[closing switch] (7.5,17.25);
+    \end{circuitikz}
+}%
+
+        \end{figure}
+            \column{0.5\textwidth}
+            注意到这是一个\textbf{二阶系统}，使用五要素法。
+            \pause
+            \only<1-11>{
+            首先通过ABCD矩阵计算传递函数，用来获得$\xi, \omega_0$. 注意虽然一个电路可以通过奇怪的取输入输出方式变成多种传递函数，但是只要不发生零极点对消，则其共享一个分母（数学上即共享一套极点）。
+            }
+            \only<12->{
+                然后利用$t=0-$时稳态，并列出合上开关时刻的瞬时电路方程和瞬变量电路方程求解初值、微分初值。
+            }
+        \end{columns}
+        \vspace{0.3cm}
+        \pause
+        
+        \only<2-11>{
+        \resizebox{1\textwidth}{!}{$\displaystyle
+        \begin{aligned}
+            ABCD&=\pause\begin{bmatrix}
+            1 & R_S\\
+            0 & 1
+        \end{bmatrix}
+        \pause
+        \begin{bmatrix}
+            1 & s(L_1-M)\\
+            0 & 1\\
+        \end{bmatrix}
+        \pause
+        \begin{bmatrix}
+            1 & 0\\
+            \frac{1}{sM} & 1\\
+        \end{bmatrix}
+        \pause
+        \begin{bmatrix}
+            1 & s(L_2-M)\\
+            0 & 1\\
+        \end{bmatrix}
+        \pause
+        \begin{bmatrix}
+            1 & 0\\
+            \frac{1}{R_L} & 1\\
+        \end{bmatrix}\pause\\&=\begin{bmatrix}
+             4.2\times10^{-9}s+1.75+1.25\times 10^8s^-1& \ast\\
+             \ast & \ast
+        \end{bmatrix}\\
+        \pause
+    H_v &=\frac{1}{A}=\frac{\ast}{s^2+4.17\times10^8s+2.98\times 10^{16}}\pause\Rightarrow\omega_0=1.73\times10^8s^{-1}\,,\xi=1.21\end{aligned}
+        $}
+        }
+        \only<12>{
+            \textbf{稳态分析}：开关断开很久，能量全部耗散，电感短路，$v_{o\infty}(t)=0$。
+            
+
+            \textbf{瞬时分析}：开关闭合时，电感$L_2-M$电流为0不变，因此$v_0(0)=0$.
+            
+        }
+        \only<13->{
+            \textbf{瞬变分析}：对T形节点列写微分的KCL得到(利用$R_s$上电流突变为0得到压降为0)：
+
+            \vspace{-0.4cm}
+            $$
+            \dot{i}_{L_1-M}(0)-\dot{i}_{M}(0)-\dot{i}_{L_2-M}(0)=0\,,\dot{i}_{L_1-M}(0)=\frac{V_{s0}}{L_1-M}, \dot{i}_{M}(0)=0
+            $$
+            进而
+        $$
+            \dot{v}_0(0)=R_L\dot{i}_{L_2-M}(0)=\frac{V_{s0}}{L_1-M}R_L=\boxed{2.5\times 10^{10}\mathrm{V/s}}
+        $$
+
+        }
+        \end{block} 
+        
+    \end{frame}
 \end{document}
