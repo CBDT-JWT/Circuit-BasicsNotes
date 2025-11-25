@@ -9,7 +9,7 @@
 
 % 设置页面背景为白色
 \setbeamercolor{background canvas}{bg=white}
-
+\usepackage{pgfplots}
 % 主题设置
 \usecolortheme{default}
 \useinnertheme{rounded}
@@ -563,7 +563,8 @@ $$
 \end{frame}
 
 
-\section{思路和方法}
+\section{分析方法}
+\subsection{数学工具}
 \begin{frame}{网络参量矩阵}
     \only<1>{虽然是电电1内容，但在电电2考试中依然有用。网络参量矩阵定义：}
     \begin{columns}
@@ -732,7 +733,7 @@ $$
 $$
     \end{columns}
 \end{frame}
-\begin{frame}{网络参量矩阵}
+\begin{frame}{传递函数}
     网络参量矩阵可以用于快速求解传递函数。
 
     \only<1>{使用zyhg矩阵：
@@ -870,7 +871,7 @@ $$
 得到总的传递函数。
     }
 \end{frame}
-\begin{frame}{网络参量}
+\begin{frame}{传递函数}
     \begin{block}{求如下网络的电压传递函数$H_v$.}
         \begin{figure}
 
@@ -920,6 +921,7 @@ $$
     \end{block}
     \uncover<3->{\tikz[remember picture,overlay]\node[anchor=north east,fill=white,text=red,font=\small] at ([yshift=-0.7cm]current page.north east) {检查量纲：$[j\omega]=[s]=s^{-1}, [RC]=[GL]=s$};}
 \end{frame}
+\subsection{时域分析}
 \begin{frame}{时域分析}
     在《信号与系统》中，我们将会学习如何严谨推导出所谓的时频对应关系和各种要素法。\pause 诚然，三要素五要素这些都是记忆微分方程的解，而这些微分方程可以利用\emph{Laplace}变换
     $$\mathscr{L}\{x(t)\}=X(s)=\int_0^\infty x(t)\mathrm{e}^{-st}\mathrm{d}t$$
@@ -929,7 +931,7 @@ $$
     \vspace{0.5cm}
     私以为研究变换域复平面上的几何、在电路中观察主极点、写出具体表达式乃至打开\texttt{cadence}都可以等价地给出我们需要的各种信息，这些方法也不应该有高下之分。
 \end{frame}
-\begin{frame}{时域分析}
+\begin{frame}{三要素法}
     对于一阶系统采用三要素法
     $$
     X(j\omega)=\frac{\ast}{1+\tau\omega}\Rightarrow x(t)=\left(x(0)-x_\infty(0)\right)\mathrm{e}^{-\frac{t}{\tau}}+x_\infty(t)
@@ -948,7 +950,7 @@ $$
         \item $x(0)$由初始条件给出，需要列\textcolor{red}{\textbf{瞬时电路方程}}求解（利用电感电流不突变，电容电压不突变）。
     \end{itemize}
 \end{frame}
-\begin{frame}{时域分析}
+\begin{frame}{五要素法}
     对于二阶系统采用五要素法
     $$
     X(s)=\frac{\ast}{s^2+2\xi\omega_0s+\omega_0^2}
@@ -1195,5 +1197,137 @@ $$
         }
         \end{block} 
         
+    \end{frame}
+    \begin{frame}{时域分析}
+        \begin{block}{解答(2)续}
+            \textbf{五要素法}：
+            $$
+            \begin{cases}
+                \omega_0=1.73\times10^8s^{-1}\\
+                \xi=1.21\\
+            \end{cases}\pause\Rightarrow
+            \begin{cases}
+                \lambda_1=\omega_0(-\xi+\sqrt{\xi^2-1})=-9.17\times10^7s^{-1}\\
+                \lambda_2=\omega_0(-\xi-\sqrt{\xi^2-1})=-3.27\times10^8s^{-1}
+            \end{cases}
+            $$
+            \pause
+            $$
+            \Rightarrow\begin{cases}
+                A=\frac{\lambda_2}{\lambda_2-\lambda_1}\left(v_o(0)-v_{o\infty}(0)\right)-\frac{1}{\lambda_2-\lambda_1}\left(\dot{v}_o(0)-\dot{v}_{o\infty}(0)\right)=106.3\mathrm V\\
+                B=\frac{\lambda_1}{\lambda_1-\lambda_2}\left(v_o(0)-v_{o\infty}(0)\right)-\frac{1}{\lambda_1-\lambda_2}\left(\dot{v}_o(0)-\dot{v}_{o\infty}(0)\right)=-106.3\mathrm V\\
+            \end{cases}
+            $$
+            \pause
+            $$
+            \Rightarrow v_o(t)=A\mathrm{e}^{\lambda_1 t}+B\mathrm{e}^{\lambda_2 t}=\boxed{106.3\mathrm V\cdot \mathrm{e}^{-9.17\times10^7 t}-106.3\mathrm V\cdot \mathrm{e}^{-3.27\times10^8 t}}
+            $$
+        \end{block}
+    \end{frame}
+    \subsection{频域分析}
+    \begin{frame}{伯特图的绘制}
+        伯特图需要简单了解一下数学原理。对于有理传递函数
+        $$
+        H(j\omega)=H_0\frac{(1\pm j\frac{\omega}{\omega_{z1}})(1\pm j\frac{\omega}{\omega_{z2}})\cdots}{(1+j\frac{\omega}{\omega_{p1}})(1+j\frac{\omega}{\omega_{p2}})\cdots}
+        $$
+        有
+        $$
+        |H(j\omega)|=|H_0|\frac{\sqrt{1+(\frac{\omega}{\omega_{z1}})^2}\sqrt{1+(\frac{\omega}{\omega_{z2}})^2}\cdots}{\sqrt{1+(\frac{\omega}{\omega_{p1}})^2}\sqrt{1+(\frac{\omega}{\omega_{p2}})^2}\cdots}
+        $$
+        利用近似
+        $$
+        \log\left(1+x\right)\approx\begin{cases}
+             0 & x<1\\
+             \log x & x> 1
+        \end{cases}=\mathtt{Relu}(\log x)
+        $$
+        得到
+
+        \resizebox{1\textwidth}{!}{%
+        $\displaystyle
+        20\log\left|H(j\omega)\right|=20\log|H_0|+\sum_{i\in\text{零点}} 20\mathtt{Relu}\left(\log\frac{\omega}{\omega_{zi}}\right)-\sum_{i\in\text{极点}} 20\mathtt{Relu}\left(\log\frac{\omega}{\omega_{pi}}\right)
+        $}
+    \end{frame}
+    \begin{frame}{伯特图的绘制}
+        \begin{columns}
+            \column{0.4\textwidth}
+            $$
+            \begin{aligned}
+        \log\left(1+x\right)&\approx\begin{cases}
+             0 & x<1\\
+             \log x & x> 1
+        \end{cases}\\&=\mathtt{Relu}(\log x)\end{aligned}
+        $$
+            \column{0.6\textwidth}
+            \begin{figure}
+                \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    xlabel={$\log_{10} x$},
+                    ylabel={},
+                    legend pos=north west,
+                    grid=both,
+                    xmin=-5, xmax=5,
+                    ymin=-1, ymax=5,
+                    width=0.9\textwidth,
+                    height=0.6\textwidth,
+                ]
+                % Plot log(1+10^x)
+                \addplot[blue, thick, domain=-5:5, samples=200] {ln(1+10^x)/ln(10)};
+                \addlegendentry{$\log_{10}(1+x)$}
+                
+                % Plot ReLU(log x) = max(0, log x)
+                \addplot[red, thick, domain=-5:0, samples=50] {0};
+                \addplot[red, thick, domain=0:5, samples=50] {x};
+                \addlegendentry{$\mathtt{ReLU}(\log_{10} x)$}
+                \end{axis}
+            \end{tikzpicture}
+        \end{figure}
+        \end{columns}
+    \end{frame}
+    \begin{frame}{伯特图的绘制}
+        伯特图的绘制几乎属于必考题型，也是比较简单和套路的一种考题。主要分为两个步骤：
+        \uncover<2->{
+            \begin{block}{第一步：求传函并因式分解}
+                求出有理式形式的传递函数：$H_0\Rightarrow$幅频曲线最大值
+                $$
+                H(j\omega)=
+                    H_0\frac{(1\pm j\frac{\omega}{\omega_{z1}})(1\pm j\frac{\omega}{\omega_{z2}})\cdots}{(1+j\frac{\omega}{\omega_{p1}})(1+j\frac{\omega}{\omega_{p2}})\cdots}
+                $$
+            \end{block}
+        }
+        \uncover<3->{
+            \begin{block}{第二步： 零极点按照大小排序}
+                \begin{itemize}
+                    \item<4-> \textbf{幅频}\quad 碰到极点(斜率\texttt{+=})$-20\mathrm{dB/dec}$，碰到零点(斜率\texttt{+=}) $+20\mathrm{dB/dec}$。
+                    \item <5-> \textbf{相频}\quad 极点滞后(相位在$0.1\sim10$倍频率内线性\textcolor{red}{\textbf{减少}})$90^\circ$，零点看左右，左\textcolor{red}{\textbf{超}}右\textcolor{red}{\textbf{滞}}$90^\circ$。
+                \end{itemize}
+                \end{block}
+        }
+    \end{frame}
+    \begin{frame}{伯特图的绘制}
+        以上对于没有$0$零点的情况。如果有$0$零点怎么办？
+        
+        \pause
+
+        有$0$零点时，传递函数形式为
+        $$
+        H(j\omega)=H_0\frac{(j\frac{\omega}{\omega_{z0}})^{m}(1\pm j\frac{\omega}{\omega_{z1}})(1\pm j\frac{\omega}{\omega_{z2}})\cdots}{(1+j\frac{\omega}{\omega_{p1}})(1+j\frac{\omega}{\omega_{p2}})\cdots}
+        $$
+        \pause
+        
+        由于频率取对数后，$0$零点对应到$-\infty$，因此幅频率曲线“天生”带一个$+m\times 20\mathrm{dB/dec}$的斜率，且相频曲线“天生”带相位$m\times 90^\circ$。
+
+        \pause
+
+        而回到之前的公式：
+        \resizebox{1\textwidth}{!}{%
+        $\displaystyle
+        20\log\left|H(j\omega)\right|=20\log|H_0|+\sum_{i\in\text{零点}} 20\mathtt{Relu}\left(\log\frac{\omega}{\omega_{zi}}\right)-\sum_{i\in\text{极点}} 20\mathtt{Relu}\left(\log\frac{\omega}{\omega_{pi}}\right)\textcolor{red}{+20m\log\frac{\omega}{\omega_{z0}}}
+        $}
+
+        \pause
+
+        可见，$0$零点对$\omega_{z0}$点的增益贡献恰好为$0\mathrm{dB}$。因此只需要巧妙地把$\omega_{z0}$放进通带即可。
     \end{frame}
 \end{document}
