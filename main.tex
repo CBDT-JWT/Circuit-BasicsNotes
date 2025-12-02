@@ -30,9 +30,16 @@
 \ctikzset{resistor = european}
 % 全局设置 circuitikz 电感样式为 American
 \ctikzset{inductor = american}
-
+% 全局设置 MOS 管样式：箭头、没有圆圈
+\ctikzset{tripoles/mos style=arrows}
+% \ctikzset{tripoles/mos style=american}
 % 设置数学字体为默认的 Computer Modern
 \usefonttheme[onlymath]{serif}
+
+% 自定义提醒命令
+\newcommand{\remind}[1]{%
+    \tikz[remember picture,overlay]\node[anchor=north east,fill=white,text=red,font=\small] at ([yshift=-0.7cm]current page.north east) {#1};%
+}
 
 % 标题信息
 \title{电子电路与系统基础（II）参考讲义}
@@ -1301,6 +1308,7 @@ $$
                 \begin{itemize}
                     \item<4-> \textbf{幅频}\quad 碰到极点(斜率\texttt{+=})$-20\mathrm{dB/dec}$，碰到零点(斜率\texttt{+=}) $+20\mathrm{dB/dec}$。
                     \item <5-> \textbf{相频}\quad 极点滞后(相位在$0.1\sim10$倍频率内线性\textcolor{red}{\textbf{减少}})$90^\circ$，零点看左右，左\textcolor{red}{\textbf{超}}右\textcolor{red}{\textbf{滞}}$90^\circ$。
+                    \item <5->$1+j\frac{\omega}{\omega_{z}}$左半平面，$1-j\frac{\omega}{\omega_{z}}$右半平面.即\textcolor{red}{$90^\circ$的正负号就是$j\dfrac{\omega}{\omega_z}$前面的正负号}。
                 \end{itemize}
                 \end{block}
         }
@@ -1330,4 +1338,542 @@ $$
 
         可见，$0$零点对$\omega_{z0}$点的增益贡献恰好为$0\mathrm{dB}$。因此只需要巧妙地把$\omega_{z0}$放进通带即可。
     \end{frame}
+    \begin{frame}{伯特图绘制}
+        \begin{block}{例题}
+            已知$H(j\omega)=-10^6\dfrac{j\omega\left(j\omega+5\times10^9\right)}{\left(j\omega+5\times10^6\right)\left(j\omega+1\times10^8\right)}$,绘制幅频特性和相频特性曲线。
+            \end{block}
+        \pause
+        \begin{block}{解答}
+            首先化简传递函数得到$H(j\omega)=(-10)\dfrac{j\omega\left(1+j\frac{\omega}{5\times10^9}\right)}{\left(1+j\frac{\omega}{5\times10^6}\right)\left(1+j\frac{\omega}{1\times10^8}\right)}$
+            \pause
+
+            然后列出零极点：
+        \begin{itemize}
+            \item 零点：$\omega_{z0}=0$, $\omega_{z1}=5\times10^9\mathrm{rad/s}$
+            \item 极点：$\omega_{p1}=5\times10^6\mathrm{rad/s}$, $\omega_{p2}=1\times10^8\mathrm{rad/s}$
+        \end{itemize}
+        \end{block}
+        
+    \end{frame}
+    \begin{frame}{伯特图绘制}
+        $$H(j\omega)=(-10)\dfrac{j\omega\left(1+j\frac{\omega}{5\times10^9}\right)}{\left(1+j\frac{\omega}{5\times10^6}\right)\left(1+j\frac{\omega}{1\times10^8}\right)}$$
+        \begin{block}{
+            幅频特性曲线绘制
+        }
+        \pause
+            \begin{table}
+                \centering\resizebox{1\textwidth}{!}{%
+                \begin{tabular}{c|c c c c}
+                    \toprule
+                    $\omega$ & $(0,5\times10^6]$ & $(5\times10^6, 1\times10^8]$ & $(1\times10^8, 5\times10^9]$ & $(5\times10^9, +\infty)$ \\
+                    \midrule
+                    斜率$(\mathrm{dB/dec})$ & $+20$ & $0$ & $-20$ & $0$ \\
+                    \bottomrule
+                \end{tabular}}
+            \end{table}
+        \pause
+        求解平台增益：
+\resizebox{1\textwidth}{!}{%
+        $\displaystyle
+        20\log\left|H(j\omega)\right|=20\log|H_0|+\sum_{i\in\text{零点}} 20\mathtt{Relu}\left(\log\frac{\omega}{\omega_{zi}}\right)-\sum_{i\in\text{极点}} 20\mathtt{Relu}\left(\log\frac{\omega}{\omega_{pi}}\right)\textcolor{red}{+20m\log\frac{\omega}{\omega_{z0}}}
+        $}
+
+        $(5\times10^6, 1\times10^8]$区间：($[5\times10^9,\infty)$区间不用再画)
+
+        \resizebox{1\textwidth}{!}{%
+        $\displaystyle
+        H_{dB}=20\log 10+0-20\left(\log\omega-\log 5\times10^6\right)+20\left(\log\omega-\textcolor{red}{\log1}\right)=153.98\mathrm{dB}
+        $}
+        \end{block}
+
+    \end{frame}
+    \begin{frame}{伯特图绘制}
+    \begin{block}{
+        幅频特性曲线绘制
+    }
+    \begin{figure}
+        \centering
+        \resizebox{1\textwidth}{!}{
+        \begin{tikzpicture}
+  \begin{semilogxaxis}[
+    width=12cm,
+    height=7cm,
+    xlabel={$\omega\ \mathrm{(rad/s)}$},
+    ylabel={$|H(j\omega)|\ \mathrm{(dB)}$},
+    grid=both,
+    xmin=1e3,
+    xmax=1e11,
+    ymin=100,
+    ymax=170,
+    log basis x=10,
+  ]
+
+    % ---------- 幅频渐近线 ----------
+
+    % +20 dB/dec
+    \addplot[
+      thick,
+      domain=1e3:5e6,
+      samples=200
+    ] {20*log10(x) + 20};
+
+    % 平台 153.98 dB
+    \addplot[
+      thick,
+      domain=5e6:1e8
+    ] {153.98};
+
+    % -20 dB/dec
+    \addplot[
+      thick,
+      domain=1e8:5e9,
+      samples=200
+    ] {-20*log10(x) + 313.98};
+
+    % 高频平台 120 dB
+    \addplot[
+      thick,
+      domain=5e9:1e11
+    ] {120};
+
+    % ---------- 红色竖虚线：拐点 ----------
+
+    \addplot[
+      red,
+      dashed,
+      thick
+    ] coordinates {(5e6,100) (5e6,170)};
+
+    \addplot[
+      red,
+      dashed,
+      thick
+    ] coordinates {(1e8,100) (1e8,170)};
+
+    \addplot[
+      red,
+      dashed,
+      thick
+    ] coordinates {(5e9,100) (5e9,170)};
+    \addplot[
+      blue,
+      thick,
+      domain=1e3:1e11,
+      samples=600
+    ]{20*log10(
+  sqrt(100*(x*x*(1+(x/5e9)^2))/
+  ((1+(x/5e6)^2)*(1+(x/1e8)^2)))
+)};
+    % ---------- 数值标注：平台高度 ----------
+
+    \node[
+      anchor=south,
+      fill=white,
+      inner sep=2pt
+    ] at (axis cs:2e6,153.98)
+    {$153.98\,\mathrm{dB}$};
+
+    \node[
+      anchor=north,
+      fill=white,
+      inner sep=2pt
+    ] at (axis cs:2e10,120)
+    {$120\,\mathrm{dB}$};
+
+  \end{semilogxaxis}
+\end{tikzpicture}}
+
+
+    \end{figure}
+    \end{block}
+    \end{frame}
+    \begin{frame}{伯特图绘制}
+        $$H(j\omega)=(-10)\dfrac{j\omega\left(1+j\frac{\omega}{5\times10^9}\right)}{\left(1+j\frac{\omega}{5\times10^6}\right)\left(1+j\frac{\omega}{1\times10^8}\right)}$$
+    \begin{block}{
+        相频特性曲线绘制
+    }
+        \pause
+        $0$频点：$-10$提供$180^\circ$相位,$j\omega$提供$90^\circ$相位，总计$270^\circ$相位。
+        \pause
+            \begin{table}
+                \centering\resizebox{1\textwidth}{!}{%
+                \begin{tabular}{c|c c c c}
+                    \toprule
+                    $\omega$ &$0$& $5\times10^5\to5\times10^7$ & $1\times10^7\to1\times10^9$ & $5\times10^8\to5\times10^{10}$  \\
+                    \midrule
+                    $\varphi(\mathrm{deg})$ & $270$ & $270\to180$ & $180\to90$&$90\to180$ \\
+                    \bottomrule
+                \end{tabular}}
+            \end{table}
+            \pause
+            
+            重叠的区间：取四边形对角线
+        \end{block}
+    \end{frame}
+    \begin{frame}{伯特图绘制}
+        \begin{block}{相频特性曲线绘制}
+            \begin{figure}
+  \centering
+  \resizebox{1\linewidth}{!}{\begin{tikzpicture}
+    \begin{semilogxaxis}[
+      width=12cm,
+      height=7cm,
+      xlabel={$\omega\ \mathrm{(rad/s)}$},
+      ylabel={$\angle H(j\omega)\ \mathrm{(deg)}$},
+      grid=both,
+      xmin=1e3,
+      xmax=1e11,
+      ymin=-270,
+      ymax=0,
+      log basis x=10,
+      legend style={at={(0.02,0.02)},anchor=south west},
+      declare function={
+        % 一阶极点的伯特相位近似（单位：度）
+        phiP(\w,\wzero) = 
+          (\w <= 0.1*\wzero) ? 0 :
+          ( (\w >= 10*\wzero) ? -90 :
+            -45*(ln(\w/\wzero)/ln(10) + 1) );
+        % 一阶零点的伯特相位近似（单位：度）
+        phiZ(\w,\wzero) = 
+          (\w <= 0.1*\wzero) ? 0 :
+          ( (\w >= 10*\wzero) ?  90 :
+             45*(ln(\w/\wzero)/ln(10) + 1) );
+      },
+    ]
+
+      % ================== 伯特折线近似相位 ==================
+      % 常数(-10)给 -180°，jω 给 +90°，其余用 phiP / phiZ 叠加
+      \addplot[
+        thick,
+        domain=1e3:1e11,
+        samples=400
+      ]
+      {
+        -90
+        + phiP(x,5e6)   % 极点 at 5e6
+        + phiP(x,1e8)   % 极点 at 1e8
+        + phiZ(x,5e9)   % 零点 at 5e9
+      };
+      
+
+      % ================== 精确相位曲线 ==================
+      % 注意：pgfmath 的 atan() 返回度数
+      \addplot[
+        blue,
+        thick,
+        domain=1e3:1e11,
+        samples=600
+      ]
+      {
+        -90
+        + atan(x/5e9)
+        - atan(x/5e6)
+        - atan(x/1e8)
+      };
+      
+
+      % ========== 可选：红色竖虚线标出拐点 ==========
+      \foreach \w in {5e6,1e8,5e9}{
+        \addplot[red,dashed]
+          coordinates {(\w,-270) (\w,0)};
+      }
+
+    \end{semilogxaxis}
+  \end{tikzpicture}}
+\end{figure}
+
+        \end{block}
+    \end{frame}
+\begin{frame}{滤波器分析}
+    \remind{这些内容应当牢记！}
+    $3\mathrm{dB}$: $H(s)=\frac{H_0}{\sqrt 2}$
+\begin{block}{二阶滤波器的$3\mathrm{dB}$特性}
+    \begin{columns}
+        \column{.38\textwidth}
+        \begin{center}
+            二阶低通
+        \end{center}
+        \resizebox{1\textwidth}{!}{
+        $\displaystyle
+        \omega_{3\mathrm{dB}}=\begin{cases}
+            \omega_0 & \xi=\frac{1}{\sqrt 2}\\
+            \dfrac{1}{2\xi}&\xi\gg 1\\
+            1.554\omega_0 & \xi\ll 1\\
+        \end{cases}
+        $}
+        \column{.38\textwidth}
+        \begin{center}
+            二阶高通
+        \end{center}
+         \resizebox{1\textwidth}{!}{
+        $\displaystyle
+        \omega_{3\mathrm{dB}}=\begin{cases}
+            \omega_0 & \xi=\frac{1}{\sqrt 2}\\
+            2\xi&\xi\gg 1\\
+            \dfrac{1}{1.554}\omega_0 & \xi\ll 1\\
+        \end{cases}
+        $}
+        \column{.26\textwidth}
+        \begin{center}
+            二阶带阻/带通
+        \end{center}
+        \resizebox{1\textwidth}{!}{
+            $\displaystyle\begin{aligned}
+            BW_{3\mathrm{dB}}&=f_2-f_1=\dfrac{f_0}{Q}\\
+            f_0&=\sqrt{f_1f_2}=\dfrac{\omega_0}{2\pi}\\
+            Q&=\dfrac{1}{2\xi}
+            \end{aligned}
+            $}
+    \end{columns}
+\end{block}
+\pause
+\begin{block}{平坦特性}
+    \begin{table}
+        \centering
+        \resizebox{0.55\textwidth}{!}{%
+        \begin{tabular}{c|c c}
+            \toprule
+            $\xi$ & 名字 & 特性\\
+            \midrule
+            $0.707$ & 巴特沃斯 & 幅度最大平坦\\
+            $0.866$ & 切比雪夫 & 群延时最大平坦\\
+            $(0.707,1)$ & 最优二阶高/低通 & 快的阶跃响应\\
+            \bottomrule
+        \end{tabular}
+        }
+    \end{table}
+\end{block}
+
+\end{frame}
+\begin{frame}{滤波器分析}
+    \begin{block}{谐振现象}
+        \remind{这些内容应当牢记！}
+        \pause
+        时域：体现为\textbf{振铃}现象,振铃时间$1.5QT$
+        \pause
+
+        频域：出现谐振峰($\Im(Z)=0/\Im(Y)=0$)
+        \pause
+        \begin{columns}
+            \column{0.5\textwidth}
+            \begin{center}
+                低通系统
+            \end{center}
+            $$
+            \begin{aligned}
+                \omega_e&=\sqrt{1-2\xi^2}\omega_0\quad(\xi<0.707)\\
+                A(\omega_e)&=\frac{1}{2\xi\sqrt{1-\xi^2}}H_0\\
+                &\approx QH_0\quad(\xi\ll 0.707)
+            \end{aligned}
+            $$
+
+            \column{0.5\textwidth}
+            \begin{center}
+                高通系统
+            \end{center}
+            $$
+            \begin{aligned}
+                \omega_e&=\frac{1}{\sqrt{1-2\xi^2}}\omega_0\quad(\xi<0.707)\\
+                A(\omega_e)&=\frac{1}{2\xi\sqrt{1-\xi^2}}H_0\\
+                &\approx QH_0\quad(\xi\ll 0.707)
+            \end{aligned}
+            $$
+        \end{columns}
+        \pause
+
+        对于高$Q$系统，有$\omega_e\approx \omega_0, A(\omega_e)\approx QH_0$。
+            
+
+        
+    \end{block}
+\end{frame}
+\begin{frame}{滤波器分析}
+\begin{block}{例题(2024年T10回忆版)}
+    \begin{columns}
+        \column{0.55\textwidth}
+        右侧电路中，NMOS在该偏置下$g_m=40\mathrm{mS}$，$r_{ds}=\infty$，全耦合变压器的匝数比为$1:2$, 初级绕组电感$L=40\mu \mathrm{H}$，电容$C=100\mathrm{pF}$，负载电阻$R=2k\mathrm{\Omega}$。假设输入信号$v_i$为交流小信号。则系统的传递函数$H_v(s)=\frac{v_o}{v_i}$ 为[\qquad]。这是一个[\qquad]滤波器（低通/高通/带通/带阻），其3dB频点（高低通）或带宽（带通/带阻）为[\qquad]。
+        \column{0.4\textwidth}
+        \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (10,14.5) to[C,l={ \LARGE $C$}] (10,17);
+\draw (11.25,17) to[L ] (11.25,14.5);
+\draw (12.5,14.5) to[L ] (12.5,17);
+\draw (13.75,17) to[R,l={ \LARGE $R$}] (13.75,14.5);
+\draw (10,17) to[short] (11.25,17);
+\draw (10,14.5) to[short] (11.25,14.5);
+\draw (10.5,12.5) to[Tnmos, transistors/scale=1.02] (10.5,14.5);
+\draw (10.5,12.5) to (10.5,12.25) node[sground]{};
+\draw (12.5,17) to[short] (13.75,17);
+\draw (12.5,14.5) to[short] (13.75,14.5);
+\draw (13.75,17) to[short, -o] (14.75,17) ;
+\draw (8.75,13.5) to[sinusoidal voltage source, sources/symbol/rotate=auto] (8.75,12);
+\draw (8.75,13.5) to[short] (9.5,13.5);
+\draw (8.75,10.75) to (8.75,10.5) node[sground]{};
+\draw (13,14.5) to (13,14.25) node[sground]{};
+\draw [short] (10.25,18.25) -- (10.75,18.25);
+\draw (10.5,18.25) to[short] (10.5,17);
+\node [font=\LARGE] at (10.5,18.75) {$V_{DD}$};
+\node [font=\LARGE] at (11.75,17.25) {$1:2$};
+\node [font=\LARGE] at (12,14.75) {$k=1$};
+\node at (11.5,16.75) [circ] {};
+\node at (12.25,16.75) [circ] {};
+\node [font=\LARGE] at (10.75,15.25) {$L$};
+\node [font=\LARGE] at (15.25,17.25) {$v_o$};
+\node [font=\LARGE] at (8,13) {$v_i$};
+\draw (8.75,12) to[battery ,l={ \LARGE $V_G$}] (8.75,10.75);
+\end{circuitikz}
+}%
+\end{figure}
+    \end{columns}
+\end{block}
+\end{frame}
+\begin{frame}{滤波器分析}
+    \begin{block}{解答}
+        画出其小信号模型：
+\pause
+
+\begin{figure}[!ht]
+\centering
+\resizebox{.5\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (10,14.5) to[C,l={ \LARGE $C$}] (10,17);
+\draw (11.25,17) to[L ] (11.25,14.5);
+\draw (12.5,14.5) to[L ] (12.5,17);
+\draw (13.75,17) to[R,l={ \LARGE $R$}] (13.75,14.5);
+\draw (10,17) to[short] (11.25,17);
+\draw (10,14.5) to[short] (11.25,14.5);
+\draw (12.5,17) to[short] (13.75,17);
+\draw (12.5,14.5) to[short] (13.75,14.5);
+\draw (13.75,17) to[short, -o] (14.75,17) ;
+\node [font=\LARGE] at (11.75,17.25) {$1:2$};
+\node [font=\LARGE] at (11.75,18) {$k=1$};
+\node at (11.5,14.75) [circ] {};
+\node at (12.25,16.75) [circ] {};
+\node [font=\LARGE] at (10.75,15.25) {$L$};
+\node [font=\LARGE] at (15.25,17.25) {$v_o$};
+
+\draw (8.25,17) to[short] (10,17);
+\draw (8.25,14.5) to[short] (12.5,14.5);
+\draw (6.75,17) to[short, -o] (5.75,17) ;
+\draw (8.25,14.5) to[short] (6.5,14.5);
+\draw (6.5,14.5) to[short, -o] (5.75,14.5) ;
+\node [font=\LARGE] at (5.75,15.75) {$v_i$};
+\draw (8.25,17) to[american current source] (8.25,14.5);
+\node [font=\LARGE] at (7.25,15.75) {$g_mv_i$};
+\end{circuitikz}
+}%
+
+\end{figure}
+
+\pause
+
+等效掉互感：注意变压比$M:L_2=kN_1N_2:N_2^2=kN_1:N_2=1:2$
+\begin{figure}[!ht]
+\centering
+\resizebox{0.6\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (10,14.5) to[C,l={ \LARGE $C$}] (10,17);
+\draw (13,17) to[L ] (13,14.5);
+\draw (14.25,14.5) to[L ] (14.25,17);
+\draw (15.5,17) to[R,l={ \LARGE $R$}] (15.5,14.5);
+\draw (11.75,17) to[short] (13,17);
+\draw (11.75,14.5) to[short] (13,14.5);
+\draw (14.25,17) to[short] (15.5,17);
+\draw (14.25,14.5) to[short] (15.5,14.5);
+\draw (15.5,17) to[short, -o] (16.5,17) ;
+\node [font=\LARGE] at (13.5,17.5) {$M:L_2$};
+\node at (13.25,14.75) [circ] {};
+\node at (14,16.75) [circ] {};
+\node [font=\LARGE] at (17,17.25) {$v_o$};
+
+\draw (8.25,17) to[short] (10,17);
+\draw (10,14.5) to[short] (14.25,14.5);
+\draw (6.75,17) to[short, -o] (5.75,17) ;
+\draw (8.25,14.5) to[short] (6.5,14.5);
+\draw (6.5,14.5) to[short, -o] (5.75,14.5) ;
+\node [font=\LARGE] at (5.75,15.75) {$v_i$};
+\draw (8.25,17) to[american current source] (8.25,14.5);
+\node [font=\LARGE] at (7.25,15.75) {$g_mv_i$};
+\draw (8.25,14.5) to[short] (10,14.5);
+\draw (11.75,17) to[L,l={ \LARGE $L$} ] (11.75,14.5);
+\draw (10,17) to[short] (11.75,17);
+\draw (9,14.5) to (9,14.25) node[sground]{};
+\end{circuitikz}
+}
+\end{figure}
+    \end{block}
+\end{frame}
+\begin{frame}{滤波器分析}
+    \begin{block}{解答}
+        反射电阻：
+        $R'=\left(\dfrac{N_1}{N_2}\right)^2R=\dfrac{1}{4}R=500\Omega$
+        \begin{figure}[!ht]
+\centering
+\resizebox{0.6\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (9.75,14.5) to[C,l={ \LARGE $C$}] (9.75,17);
+\draw (13,17) to[L ] (13,14.5);
+\draw (14.25,14.5) to[L ] (14.25,17);
+\draw (10.5,17) to[R,l={ \LARGE $R'$}] (10.5,14.5);
+\draw (11.75,17) to[short] (13,17);
+\draw (11.75,14.5) to[short] (13,14.5);
+\draw (14.25,17) to[short] (15.5,17);
+\draw (15.5,17) to[short, -o] (16.5,17) ;
+\node [font=\LARGE] at (13.5,17.5) {$M:L_2$};
+\node at (13.25,14.75) [circ] {};
+\node at (14,16.75) [circ] {};
+\node [font=\LARGE] at (17,17.25) {$v_o$};
+
+\draw (8.25,17) to[short] (10,17);
+\draw (10,14.5) to[short] (14.25,14.5);
+\draw (6.75,17) to[short, -o] (5.75,17) ;
+\draw (8.25,14.5) to[short] (6.5,14.5);
+\draw (6.5,14.5) to[short, -o] (5.75,14.5) ;
+\node [font=\LARGE] at (5.75,15.75) {$v_i$};
+\draw (8.25,17) to[american current source] (8.25,14.5);
+\node [font=\LARGE] at (7.25,15.75) {$g_mv_i$};
+\draw (8.25,14.5) to[short] (10,14.5);
+\draw (11.75,17) to[L,l={ \LARGE $L$} ] (11.75,14.5);
+\draw (10,17) to[short] (11.75,17);
+\draw (9,14.5) to (9,14.25) node[sground]{};
+
+
+\end{circuitikz}
+}%
+
+\end{figure}
+
+\pause
+则传递函数为：
+\resizebox{\textwidth}{!}{
+$\displaystyle
+\begin{aligned}
+H_v(s)&=-g_m\cdot\left(\frac{1}{sC}\parallel R'\parallel sL\right)\cdot(-2)\\
+&=\frac{2g_mR'}{sC+1/R'+1/sL}=\frac{(2g_mR'/C)s}{s^2+(1/CR')s+(1/LC)}=\frac{4\times10^{11}s}{s^2+2\times10^7s+2.5\times10^{14}}\\
+\end{aligned}
+$}
+
+    \end{block}
+\end{frame}
+\begin{frame}
+$$
+H_v(s)=\frac{4\times10^{11}s}{s^2+2\times10^7s+2.5\times10^{14}}=H_0\frac{2\xi\omega_0s}{s^2+2\xi\omega_0s+\omega_0^2}
+$$
+$$
+\therefore\begin{cases}
+\omega_0=1.58\times10^7\mathrm{rad/s}\\
+\xi=0.632\\
+H_0=2\times10^4
+\end{cases}
+$$
+$$
+\therefore\text{带通滤波器，}BW=\dfrac{\omega_0}{2\pi Q}=\dfrac{2\xi\omega_0}{2\pi}=3.18\mathrm{MHz}
+$$
+\end{frame}
 \end{document}
