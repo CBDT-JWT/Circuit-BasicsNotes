@@ -40,6 +40,43 @@
 \newcommand{\remind}[1]{%
     \tikz[remember picture,overlay]\node[anchor=north east,fill=white,text=red,font=\small] at ([yshift=-0.7cm]current page.north east) {#1};%
 }
+\newcommand{\OscCircuitFigure}{%
+\centering
+\resizebox{0.6\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (23.25,12.25) node[op amp,scale=1, yscale=-1 ] (opamp2) {};
+\draw (opamp2.+) to[short] (21.75,12.75);
+\draw  (opamp2.-) to[short] (21.75,11.75);
+\draw (24.45,12.25) to[short](24.75,12.25);
+\draw (24.5,12.25) to[R,l={ \large $R_f$}] (24.5,10.5);
+\draw (24.5,10.5) to[R,l={ \large $R_r$}] (24.5,9.25);
+\node at (24.5,12.25) [circ] {};
+\draw (24.75,12.25) to[short, -o] (25.25,12.25) ;
+\draw (21.75,11.75) to[short] (21.75,10.75);
+\draw (21.75,10.75) to[short] (24.5,10.75);
+\node at (24.5,10.75) [circ] {};
+\draw (24.5,9.25) to (24.5,9) node[sground]{};
+\draw (21.75,12.75) to[short] (20.75,12.75);
+\draw (20.75,12.75) to[R,l={ \large $R_2$}] (20.75,10.5);
+\draw (20.75,10.5) to (20.75,10.25) node[sground]{};
+\draw (20.75,12.75) to[C,l={ \large $C_2$}] (19,12.75);
+\draw (19,12.75) to[C,l={ \large $C_1$}] (17.25,12.75);
+\draw (17.25,12.75) to[american voltage source,l={ \large $v_s$}] (17.25,10.75);
+\draw (17.25,10.75) to (17.25,10.5) node[sground]{};
+\draw (19,12.75) to[short] (19,13.75);
+\draw (19,13.75) to[short] (20.25,13.75);
+\draw (24.5,12.25) to[short] (24.5,13.75);
+\draw (20.25,13.75) to[R,l={ \large $R_1$}] (24.5,13.75);
+\node [font=\large] at (25.75,12.5) {$v_o$};
+\draw [line width=1pt, dashed] (18.75,14) -- (18.75,10.25);
+\draw [->, >=Stealth] (18.25,10.75) -- (19.25,10.75);
+\draw [short] (18.25,10.75) -- (18.25,9.25);
+\node [font=\large] at (18.75,9.75) {$Z_{in}$};
+\end{circuitikz}
+}%
+
+}
 
 % 标题信息
 \title{电子电路与系统基础（II）参考讲义}
@@ -84,7 +121,7 @@
 \draw (9.5,10.25) to[short] (9,10.25);
 \end{circuitikz}
 }%
-\label{fig:my_label}
+
 \end{figure}
 \end{columns}
 \end{frame}
@@ -241,7 +278,7 @@
 \node at (6,18) [circ] {};
 \end{circuitikz}
 }%
-\label{fig:my_label}
+
 \end{figure}
 $$
 \begin{cases}
@@ -290,7 +327,7 @@ $k \in [0,1]$：耦合系数，表示磁通量链接百分比
 \node at (6,18) [circ] {};
 \end{circuitikz}
 }%
-\label{fig:my_label}
+
 \end{figure}
 $$
 \begin{cases}
@@ -369,7 +406,7 @@ $$
 \node at (6,18) [circ] {};
 \end{circuitikz}
 }%
-\label{fig:my_label}
+
 \end{figure}
 $$
 \begin{cases}
@@ -561,12 +598,258 @@ $$
 
 
 \begin{frame}{非理想阻容感（寄生效应）}
+
+记忆这些模型并会画$|z|v.s.\quad f$的曲线！
+\begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (23.75,14) to[R,l={ \large $R$}] (26.25,14);
+\draw (26.25,14) to[C,l={ \large $C$}] (26.25,16.5);
+\draw (26.25,16.5) to[L,l={ \large $L$} ] (23.75,16.5);
+\draw (18.75,16.5) to[short, -o] (17.5,16.5) ;
+\draw (18.75,14) to[short, -o] (17.5,14) ;
+\draw (23.75,16.5) to[short, -o] (22.5,16.5) ;
+\draw (23.75,14) to[short, -o] (22.5,14) ;
+\draw (18.75,16.5) to[C,l={ \large $C$}] (18.75,14);
+\draw (23.75,16.5) to[C,l={ \large $C_p$}] (23.75,14);
+\draw (18.75,12.75) to[short, -o] (17.5,12.75) ;
+\draw (18.75,10.25) to[short, -o] (17.5,10.25) ;
+\draw (18.75,12.75) to[R,l={ \large $R$}] (18.75,10.25);
+\draw (25,12.75) to[R,l={ \large $R$}] (25,10.25);
+\draw (26.25,12.75) to[C,l={ \large $C_p$}] (26.25,10.25);
+\draw (25,12.75) to[L,l={ \large $L_s$} ] (22.75,12.75);
+\draw (22.75,12.75) to[short, -o] (22.5,12.75) ;
+\draw (26.25,10.25) to[short, -o] (22.5,10.25) ;
+\draw (26.25,12.75) to[short] (25,12.75);
+\draw (30,16.5) to[short, -o] (28.75,16.5) ;
+\draw (30,16.5) to[L,l={ \large $L$} ] (30,14);
+\draw (30,14) to[short, -o] (28.75,14) ;
+\draw (35,16.5) to[R,l={ \large $R$}] (37.5,16.5);
+\draw (37.5,14) to[L,l={ \large $L$} ] (37.5,16.5);
+\draw (35,16.5) to[short, -o] (33.75,16.5) ;
+\draw (35,14) to[short, -o] (33.75,14) ;
+\draw (35,16.5) to[C,l={ \large $C_p$}] (35,14);
+\draw (37.5,14) to[short] (35,14);
+\draw (30,12.75) to[short, -o] (28.75,12.75) ;
+\draw (30,12.75) to[L,l={ \large $L$} ] (30,10.25);
+\draw (30,10.25) to[short, -o] (28.75,10.25) ;
+\draw (35,12.75) to[R,l={ \large $R$}] (37.5,12.75);
+\draw (37.5,10.25) to[L,l={ \large $L$} ] (37.5,12.75);
+\draw (35,12.75) to[short, -o] (33.75,12.75) ;
+\draw (35,10.25) to[short, -o] (33.75,10.25) ;
+\draw (35.5,12.75) to[C,l={ \large $C_p$}] (35.5,10.25);
+\draw (37.5,10.25) to[short] (35,10.25);
+\draw (35,10.25) to[R,l={ \large $R_p$}] (35,12.75);
+\draw [line width=1.5pt, short] (30.25,12) -- (30.25,11);
+\end{circuitikz}
+}%
+
+\end{figure}
+\pause
+$|z|\,v.s.\,f$曲线的斜率可以用来判断性质。
+\begin{itemize}
+    \item 电阻：水平线
+    \item 电感：上升
+    \item 电容：下降
+\end{itemize}
 \end{frame}
 
 \begin{frame}{非理想阻容感（寄生效应）}
+    特别对于电容：
+    \begin{columns}
+        \column{0.4\textwidth}
+    $$
+    \begin{cases}
+        f_q=\frac{1}{2\pi\sqrt{LC}}&\text{串联谐振}\\
+        f_p=\frac{1}{2\pi \sqrt{L\frac{CC_p}{C+C_p}}}&\text{并联谐振}\\
+    \end{cases}
+    $$
+    \column{0.6\textwidth}
+    \begin{figure}
+        \centering
+    \includegraphics[width=0.8\linewidth]{figures/cap.png}
+
+    \end{figure}
+\end{columns}
+\pause
+
+注意蓝色线：斜率是20dB/decade，位置由元件参数决定，可以用来计算两个频点
 \end{frame}
 
-\begin{frame}{非理想晶体管（寄生效应）}
+\begin{frame}{晶体管复习}
+组态：信号不走谁就是共谁。掌握组态转化的方法，核心是希望用输入控输出，从而考虑用拆源or拆压的形式进行电路等效果；要标注好每个源的控制来源。
+\pause
+\begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (8,15.25) to[short, -o] (6.75,15.25) ;
+\draw (8,15.25) to[R] (8,12.75);
+\draw (8,15.25) to[R] (10.5,15.25);
+\draw (8,12.75) to[short, -o] (6.75,12.75) ;
+\draw (10.5,15.25) to[short, -o] (11.75,15.25) ;
+\draw (8,12.75) to[short, -o] (11.75,12.75) ;
+\draw (10.5,16.5) to[american current source] (8,16.5);
+\draw (8,16.5) to[short] (8,15.25);
+\draw (10.5,16.5) to[short] (10.5,15.25);
+\node at (8,15.25) [circ] {};
+\node at (10.5,15.25) [circ] {};
+\node [font=\LARGE] at (7.25,14) {$r_{be}$};
+\node [font=\LARGE] at (9.5,14.75) {$r_{ce}$};
+\node [font=\LARGE] at (9,17.5) {$g_mv_{be}$};
+\node [font=\LARGE] at (9,14) {$v_{be}$};
+\draw [->, >=Stealth] (8.5,13.25) -- (8.5,14.75);
+\node [font=\LARGE] at (6.25,15.25) {$e$};
+\node [font=\LARGE] at (12.25,15.25) {$c$};
+\node [font=\LARGE] at (6.25,12.75) {$b$};
+\node [font=\LARGE] at (12.25,12.75) {$b$};
+\draw (16.25,15.25) to[short, -o] (15,15.25) ;
+\draw (16.25,15.25) to[R] (16.25,12.75);
+\draw (16.25,15.25) to[R] (18.75,15.25);
+\draw (16.25,12.75) to[short, -o] (15,12.75) ;
+\draw (18.75,15.25) to[short, -o] (20,15.25) ;
+\draw (16.25,12.75) to[short, -o] (20,12.75) ;
+\draw (15.5,12.75) to[american current source] (15.5,15.25);
+\node at (16.25,15.25) [circ] {};
+\node [font=\LARGE] at (16.75,13.25) {$r_{be}$};
+\node [font=\LARGE] at (17.75,14.75) {$r_{ce}$};
+\node [font=\LARGE] at (14.25,14) {$g_mv_{be}$};
+\node [font=\LARGE] at (17.25,14) {$v_{be}$};
+\draw [->, >=Stealth] (16.75,13.25) -- (16.75,14.75);
+\node [font=\LARGE] at (14.5,15.25) {$e$};
+\node [font=\LARGE] at (20.5,15.25) {$c$};
+\node [font=\LARGE] at (14.5,12.75) {$b$};
+\node [font=\LARGE] at (20.5,12.75) {$b$};
+\draw (19.25,15.25) to[american current source] (19.25,12.75);
+\node at (15.5,15.25) [circ] {};
+\node at (15.5,12.75) [circ] {};
+\node at (16.25,12.75) [circ] {};
+\node at (8,12.75) [circ] {};
+\node at (19.25,12.75) [circ] {};
+\node at (19.25,15.25) [circ] {};
+\node [font=\LARGE] at (20.5,14.25) {$g_mv_{be}$};
+\draw (24.25,15.25) to[short, -o] (23,15.25) ;
+\draw (24.25,15.25) to[R] (24.25,12.75);
+\draw (24.25,15.25) to[R] (26.75,15.25);
+\draw (24.25,12.75) to[short, -o] (23,12.75) ;
+\draw (26.75,15.25) to[short, -o] (28,15.25) ;
+\draw (24.25,12.75) to[short, -o] (28,12.75) ;
+\node at (24.25,15.25) [circ] {};
+\node [font=\LARGE] at (24.75,13.25) {$r_{be}$};
+\node [font=\LARGE] at (25.75,14.75) {$r_{ce}$};
+\node [font=\LARGE] at (25.25,14) {$v_{be}$};
+\draw [->, >=Stealth] (24.75,13.25) -- (24.75,14.75);
+\node [font=\LARGE] at (22.5,15.25) {$e$};
+\node [font=\LARGE] at (28.5,15.25) {$c$};
+\node [font=\LARGE] at (22.5,12.75) {$b$};
+\node [font=\LARGE] at (28.5,12.75) {$b$};
+\draw (27.25,15.25) to[american current source] (27.25,12.75);
+\node at (23.5,15.25) [circ] {};
+\node at (23.5,12.75) [circ] {};
+\node at (24.25,12.75) [circ] {};
+\node at (27.25,12.75) [circ] {};
+\node at (27.25,15.25) [circ] {};
+\node [font=\LARGE] at (28.5,14.25) {$g_mv_{be}$};
+\draw (23.5,15.25) to[R] (23.5,12.75);
+\node [font=\LARGE] at (22.75,14) {$1/g_m$};
+\draw (32.25,15.25) to[short, -o] (31,15.25) ;
+\draw (32.25,12.75) to[short, -o] (31,12.75) ;
+\draw (34.75,15.25) to[short, -o] (36,15.25) ;
+\draw (32.25,12.75) to[short, -o] (36,12.75) ;
+\draw [->, >=Stealth] (31.5,15.25) .. controls (31.75,15.25) and (31.75,15.25) .. (32,15.25) ;
+\node [font=\LARGE] at (30.5,15.25) {$e$};
+\node [font=\LARGE] at (36.5,15.25) {$c$};
+\node [font=\LARGE] at (30.5,12.75) {$b$};
+\node [font=\LARGE] at (36.5,12.75) {$b$};
+\draw (35.25,12.75) to[american current source] (35.25,15.25);
+\node at (35.25,12.75) [circ] {};
+\node at (35.25,15.25) [circ] {};
+\node [font=\LARGE] at (36,14) {$i_{in}$};
+\draw (32.25,15.25) to[R] (32.25,12.75);
+\node [font=\LARGE] at (31.5,14) {$1/g_m$};
+\node [font=\LARGE] at (31.75,15.75) {$i_{in}$};
+\draw (8,10) to[short, -o] (6.75,10) ;
+\draw (10.5,10) to[R] (10.5,7.5);
+\draw (8,10) to[R] (10.5,10);
+\draw (8,7.5) to[short, -o] (6.75,7.5) ;
+\draw (10.5,10) to[short, -o] (11.75,10) ;
+\draw (8,7.5) to[short, -o] (11.75,7.5) ;
+\draw (11.25,7.5) to[american current source] (11.25,10);
+\node at (10.5,10) [circ] {};
+\node [font=\LARGE] at (9.25,10.5) {$r_{be}$};
+\node [font=\LARGE] at (10,8.75) {$r_{ce}$};
+\node [font=\LARGE] at (9,12.25) {$g_mv_{be}$};
+\node [font=\LARGE] at (9.25,9.25) {$v_{be}$};
+\draw [->, >=Stealth] (8.5,9.5) -- (10,9.5);
+\node [font=\LARGE] at (6.25,10) {$b$};
+\node [font=\LARGE] at (12.25,10) {$e$};
+\node [font=\LARGE] at (6.25,7.5) {$c$};
+\node [font=\LARGE] at (12.25,7.5) {$c$};
+\node at (10.5,7.5) [circ] {};
+\node [font=\LARGE] at (12.5,8.75) {$g_mv_{be}$};
+\draw (15.5,10) to[short, -o] (15,10) ;
+\draw (18.75,10) to[R] (18.75,7.5);
+\draw (15.5,10) to[R] (18,10);
+\draw (16.25,7.5) to[short, -o] (15,7.5) ;
+\draw (18,10) to[short, -o] (20,10) ;
+\draw (16.25,7.5) to[short, -o] (20,7.5) ;
+\draw (19.5,7.5) to[american current source] (19.5,10);
+\node at (18.75,10) [circ] {};
+\node [font=\LARGE] at (16.75,10.5) {$r_{be}$};
+\node [font=\LARGE] at (19,9.75) {$r_{ce}$};
+\node [font=\LARGE] at (16.25,8.75) {$v_{bc}$};
+\draw [->, >=Stealth] (15.75,9.5) -- (15.75,8);
+\node [font=\LARGE] at (14.5,10) {$b$};
+\node [font=\LARGE] at (20.5,10) {$e$};
+\node [font=\LARGE] at (14.5,7.5) {$c$};
+\node [font=\LARGE] at (20.5,7.5) {$c$};
+\node at (18.75,7.5) [circ] {};
+\node [font=\LARGE] at (20.75,8.75) {$g_mv_{bc}$};
+\draw [->, >=Stealth] (17.5,8) -- (17.5,9.5);
+\node [font=\LARGE] at (17,9) {$v_{ce}$};
+\draw (18,7.5) to[american current source] (18,10);
+\node [font=\LARGE] at (18,10.75) {$g_mv_{ce}$};
+\draw (23.5,10) to[short, -o] (23,10) ;
+\draw (26.75,10) to[R] (26.75,7.5);
+\draw (23.5,10) to[R] (26,10);
+\draw (24.25,7.5) to[short, -o] (23,7.5) ;
+\draw (26,10) to[short, -o] (28,10) ;
+\draw (24.25,7.5) to[short, -o] (28,7.5) ;
+\draw (27.5,7.5) to[american current source] (27.5,10);
+\node at (26.75,10) [circ] {};
+\node [font=\LARGE] at (24.75,10.5) {$r_{be}$};
+\node [font=\LARGE] at (27,10.5) {$r_{ce}$};
+\node [font=\LARGE] at (24.25,8.75) {$v_{bc}$};
+\draw [->, >=Stealth] (23.75,9.5) -- (23.75,8);
+\node [font=\LARGE] at (22.5,10) {$b$};
+\node [font=\LARGE] at (28.5,10) {$e$};
+\node [font=\LARGE] at (22.5,7.5) {$c$};
+\node [font=\LARGE] at (28.5,7.5) {$c$};
+\node at (26.75,7.5) [circ] {};
+\node [font=\LARGE] at (28.75,8.75) {$g_mv_{bc}$};
+\draw (26,10) to[R] (26,7.5);
+\node [font=\LARGE] at (26,10.5) {$1/g_m$};
+\draw (31.75,10) to[short, -o] (31.25,10) ;
+\draw (32.5,7.5) to[short, -o] (31.25,7.5) ;
+\draw (35.5,10) to[short, -o] (36.25,10) ;
+\draw (32.5,7.5) to[short, -o] (36.25,7.5) ;
+\node [font=\LARGE] at (32.5,8.75) {$v_{bc}$};
+\draw [->, >=Stealth] (32,9.5) -- (32,8);
+\node [font=\LARGE] at (30.75,10) {$b$};
+\node [font=\LARGE] at (36.75,10) {$e$};
+\node [font=\LARGE] at (30.75,7.5) {$c$};
+\node [font=\LARGE] at (36.75,7.5) {$c$};
+\draw (33.5,10) to[american voltage source] (33.5,7.5);
+\draw (33.5,10) to[R] (35.5,10);
+\node [font=\LARGE] at (34.25,8.75) {$v_{bc}$};
+\node [font=\LARGE] at (34.5,10.5) {$1/g_m$};
+\end{circuitikz}
+}%
+
+\end{figure}
 \end{frame}
 
 
@@ -938,6 +1221,169 @@ $$
     \vspace{0.5cm}
     私以为研究变换域复平面上的几何、在电路中观察主极点、写出具体表达式乃至打开\texttt{cadence}都可以等价地给出我们需要的各种信息，这些方法也不应该有高下之分。
 \end{frame}
+\begin{frame}{状态方程}
+    \textbf{状态方程}:以电路中的n个\textcolor{red}{\textbf{独立}}状态变量为未知量列写的n个一阶微分方程组，方程左侧为状态变量的一阶微分形式，方程右侧为状态变量和激励变量的代数方程形式.
+    \pause
+
+    \begin{columns}
+        \column{.32\textwidth}
+        \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (11.25,14.75) to[C] (11.25,12.25);
+\draw (11.25,14.75) to[C] (13.75,14.75);
+\draw (13.75,14.75) to[C] (13.75,12.25);
+\draw (11.25,14.75) to[short, -o] (10,14.75) ;
+\draw (11.25,12.25) to[short, -o] (10,12.25) ;
+\draw (11.25,12.25) to[short, -o] (15,12.25) ;
+\draw (13.75,14.75) to[short, -o] (15,14.75) ;
+\end{circuitikz}
+}%
+
+\end{figure}
+\pause
+
+\begin{center}
+    二阶系统
+\end{center}
+\column{.32\textwidth}
+\pause
+\begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (10.25,9.75) to[L ] (12.5,9.75);
+\draw (12.5,9.75) to[L ] (12.5,7.25);
+\draw (12.5,9.75) to[L ] (14.75,9.75);
+\draw (10.25,9.75) to[short, -o] (10,9.75) ;
+\draw (12.5,7.25) to[short, -o] (10,7.25) ;
+\draw (12.5,7.25) to[short, -o] (15,7.25) ;
+\draw (14.75,9.75) to[short, -o] (15,9.75) ;
+\end{circuitikz}
+}%
+
+\end{figure}
+\pause
+
+\begin{center}
+    二阶系统
+\end{center}
+
+\column{.32\textwidth}
+\pause
+\begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (11.25,15.75) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (9.75,15.25);
+\draw  (opamp2.-) to[short] (9.75,16.25);
+\draw (12.45,15.75) to[short](12.75,15.75);
+\draw (12.75,15.75) to[short] (12.75,17.25);
+\draw (12.75,17.25) to[short] (9.75,17.25);
+\draw (9.75,17.25) to[short] (9.75,16.25);
+\draw (12.75,15.75) to[C,l={ \LARGE $C$}] (12.75,14.75);
+\draw (7.5,15.25) to[L,l={ \LARGE $L$} ] (9.75,15.25);
+\draw (9.75,15.25) to[european resistor,l={ \LARGE $R$}] (9.75,13.5);
+\draw (7.5,15.25) to[short, -o] (7.25,15.25) ;
+\draw (9.75,13.75) to (9.75,13.5) node[sground]{};
+\draw (12.75,14.75) to (12.75,14.5) node[sground]{};
+\end{circuitikz}
+}
+\end{figure}
+\pause
+
+\begin{center}
+    一阶系统
+\end{center}
+    \end{columns}
+\end{frame}
+\begin{frame}
+    \begin{block}{例题}
+        动态电路系统状态方程列写方法如下：首先用（$\boxed{1}$）替代电容，用（$\boxed{2}$）替代电感，把动态电路变成电阻电路，然后求（$\boxed{3}$）电流和（$\boxed{4}$）电压，进而由电容、电感的微分约束方程获得状态方程。例如，对于如图所示的二阶动态电路，通过上述方法获得的状态方程如下（空中元素用图示电路元件参量表达）
+
+\[
+\frac{d}{dt}
+\begin{bmatrix}
+v_C(t)\\[4pt]
+i_L(t)
+\end{bmatrix}
+=
+\boxed{5}
+\begin{bmatrix}
+v_C(t)\\[4pt]
+i_L(t)
+\end{bmatrix}
++
+\boxed{6}
+\]
+\begin{figure}[!ht]
+\centering
+\resizebox{.45\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (10,16) to[american voltage source,l={ \LARGE $V_S$}] (10,13.5);
+\draw (10,16) to[R,l={ \LARGE $R_S$}] (12.5,16);
+\draw (12.5,16) to[L,l={ \LARGE $L$} ] (15,16);
+\draw (15,16) to[C,l={ \LARGE $C$}] (15,13.5);
+\draw (16.25,16) to[R,l={ \LARGE $R_L$}] (16.25,13.5);
+\draw (15,16) to[short] (16.25,16);
+\draw (10,13.5) to[short] (16.25,13.5);
+\draw [->, >=Stealth] (14.5,15.25) -- (14.5,14.25);
+\node [font=\LARGE] at (14,14.75) {$v_c$};
+\draw [->, >=Stealth] (14.25,16.25) -- (15.25,16.25);
+\node [font=\LARGE] at (14.75,16.75) {$i_L$};
+\draw (11.25,13.5) to (11.25,13.25) node[sground]{};
+\end{circuitikz}
+}%
+
+\end{figure}
+    \end{block}
+\end{frame}
+\begin{frame}{状态方程}
+    \begin{figure}[!ht]
+\centering
+\resizebox{.45\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (10,16) to[american voltage source,l={ \LARGE $V_S$}] (10,13.5);
+\draw (10,16) to[R,l={ \LARGE $R_S$}] (12.5,16);
+\draw (12.5,16) to[L,l={ \LARGE $L$} ] (15,16);
+\draw (15,16) to[C,l={ \LARGE $C$}] (15,13.5);
+\draw (16.25,16) to[R,l={ \LARGE $R_L$}] (16.25,13.5);
+\draw (15,16) to[short] (16.25,16);
+\draw (10,13.5) to[short] (16.25,13.5);
+\draw [->, >=Stealth] (14.5,15.25) -- (14.5,14.25);
+\node [font=\LARGE] at (14,14.75) {$v_c$};
+\draw [->, >=Stealth] (14.25,16.25) -- (15.25,16.25);
+\node [font=\LARGE] at (14.75,16.75) {$i_L$};
+\draw (11.25,13.5) to (11.25,13.25) node[sground]{};
+\end{circuitikz}
+}%
+
+\end{figure}
+$\frac{d}{dt} v_C(t)=\frac{1}{C}i_C(t)\,, \frac{d}{dt} i_L(t)=\frac{1}{L}v_L(t)$
+    \begin{block}{解答}
+        
+        $\boxed{1}$ 电压源 \quad $\boxed{2}$ 电流源 \quad$\boxed{3}$ 电容\quad $\boxed{4}$ 电感
+        \pause
+        
+        $$
+        \boxed{5}=\begin{bmatrix}
+            \frac{1}{C}\cdot -\frac{1}{R_L}&\frac{1}{C}\\
+            -\frac{1}{L}&-\frac{1}{L}R_S
+        \end{bmatrix}\,,\boxed{6}=\begin{bmatrix}
+            0\\
+            \frac{1}{L}V_S
+        \end{bmatrix}
+        $$
+    \end{block}
+\end{frame}
+
 \begin{frame}{三要素法}
     对于一阶系统采用三要素法
     $$
@@ -1812,7 +2258,7 @@ $$
     \begin{block}{解答}
         反射电阻：
         $R'=\left(\dfrac{N_1}{N_2}\right)^2R=\dfrac{1}{4}R=500\Omega$
-        \begin{figure}[!ht]
+        \begin{figure}[!t]
 \centering
 \resizebox{0.6\textwidth}{!}{%
 \begin{circuitikz}
@@ -1862,9 +2308,11 @@ $}
     \end{block}
 \end{frame}
 \begin{frame}
+    \begin{block}{解答}
 $$
 H_v(s)=\frac{4\times10^{11}s}{s^2+2\times10^7s+2.5\times10^{14}}=H_0\frac{2\xi\omega_0s}{s^2+2\xi\omega_0s+\omega_0^2}
 $$
+\pause
 $$
 \therefore\begin{cases}
 \omega_0=1.58\times10^7\mathrm{rad/s}\\
@@ -1872,8 +2320,1352 @@ $$
 H_0=2\times10^4
 \end{cases}
 $$
+\pause
 $$
 \therefore\text{带通滤波器，}BW=\dfrac{\omega_0}{2\pi Q}=\dfrac{2\xi\omega_0}{2\pi}=3.18\mathrm{MHz}
 $$
+    \end{block}
+    \pause
+    \begin{block}{提示}
+        请务必重温一下上个学期的内容！同时CAD作业也可能作为考试题目！
+    \end{block}
+\end{frame}
+\begin{frame}{频点估算}
+    频点估算即根据各个电容的频点估算总体的高低端$3\mathrm{dB}$频点。需要记住口诀
+
+    \begin{center}
+        \textcolor{TsinghuaPurple}{\emph{
+        高通开路算频点，低通短路看时间}
+        }
+    \end{center}
+    \pause
+
+    低端$3\mathrm{dB}$频点由高通电容（耦合电容、旁路电容）决定，使用开路法计算。即
+    $$
+    f_{L,3\mathrm{dB}}\approx f_{L1}+f_{L2}+\cdots=\frac{1}{2\pi}\left(\frac{1}{R_1C_1}+\frac{1}{R_2C_2}+\cdots\right)
+    $$
+    其中$R_i$为除了$C_i$外电容全部开路后，$C_i$看到的等效电阻。
+
+    \pause
+    高端$3\mathrm{dB}$频点由低通电容（通常是晶体管寄生电容）决定，使用短路法计算。即
+    $$
+    f_{L,3\mathrm{dB}}\approx\frac{1}{2\pi(\tau_{H1}+\tau_{H2}+\cdots)}=\frac{1}{2\pi}\frac{1}{R_1C_1+R_2C_2+\cdots}
+    $$
+    其中$R_i$为除了$C_i$外电容全部短路后，$C_i$看到的等效电阻。
+
+\end{frame}
+\subsection{神秘小技巧}
+\begin{frame}{阻抗匹配}
+    借助双向无损网络阻抗匹配。最大功率匹配（共轭匹配）条件：$Z_L=Z_S^\ast$, 需要记住口诀（他可能直接考这句话默写）
+    \begin{center}
+        \textcolor{TsinghuaPurple}{并大串小Q相等
+        }
+    \end{center}
+    \pause
+
+    也就是$R$大的一侧并东西，$R$小的一侧串东西。其中品质因数
+    $$
+    Q=\underbrace{\dfrac{\text{串联电抗}}{\text{串联电阻}}=\dfrac{\text{并联电纳}}{\text{并联电导}}}_{\text{局部}}=\underbrace{\sqrt{\frac{R_P}{R_S}-1}}_{\text{整体}}
+    $$
+\end{frame}
+\begin{frame}{串并等效}
+    当$Q\gg 1$时在\textcolor{red}{谐振频点附近}，可以做如下等效：
+\begin{figure}[!ht]
+\centering
+\resizebox{.7\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (7.5,16) to[R,l={ \LARGE $R$}] (10,16);
+\draw (10,16) to[L,l={ \LARGE $L$} ] (10,13.5);
+\draw (7.5,16) to[short, -o] (6.25,16) ;
+\draw (10,13.5) to[short, -o] (6.25,13.5) ;
+\draw (17.5,16) to[L,l={ \LARGE $L$} ] (17.5,13.5);
+\draw (16.25,13.5) to[R,l={ \LARGE $Q^2R$}] (16.25,16);
+\draw (17.5,16) to[short, -o] (13.75,16) ;
+\draw (17.5,13.5) to[short, -o] (13.75,13.5) ;
+\draw [<->, >=Stealth] (11.75,14.75) -- (12.75,14.75);
+\draw (7.5,12.25) to[R,l={ \LARGE $R$}] (10,12.25);
+\draw (7.5,12.25) to[short, -o] (6.25,12.25) ;
+\draw (10,9.75) to[short, -o] (6.25,9.75) ;
+\draw (16.25,9.75) to[R,l={ \LARGE $Q^2R$}] (16.25,12.25);
+\draw (17.5,12.25) to[short, -o] (13.75,12.25) ;
+\draw (17.5,9.75) to[short, -o] (13.75,9.75) ;
+\draw [<->, >=Stealth] (11.75,11) -- (12.75,11);
+\draw (10,12.25) to[C,l={ \LARGE $C$}] (10,9.75);
+\draw (17.5,12.25) to[C,l={ \LARGE $C$}] (17.5,9.75);
+\end{circuitikz}
+}%
+\end{figure}
+\end{frame}
+\begin{frame}{部分接入法}
+    当$Q\gg 1$时在\textcolor{red}{谐振频点附近}，可以做如下等效：($p$：分压比（接入系数）)
+    \begin{figure}[!ht]
+\centering
+\resizebox{.8\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (7.5,16) to[short, -o] (6.25,16) ;
+\draw (7.5,16) to[C,l={ \LARGE $C_1$}] (7.5,14.25);
+\draw (7.5,12.25) to[C,l={ \LARGE $C_2$}] (7.5,14.25);
+\draw (7.5,12.25) to[short, -o] (6.25,12.25) ;
+\draw (8.75,14) to[R,l={ \LARGE $R$}] (8.75,12.25);
+\draw (7.5,12.25) to[short] (8.75,12.25);
+\draw (8.75,14) to[short] (7.5,14);
+\draw (13.25,16) to[short, -o] (10.75,16) ;
+\draw (13.25,16) to[C] (13.25,14.25);
+\draw (13.25,14.25) to[C] (13.25,12.25);
+\draw (11.25,12.25) to[short, -o] (10.75,12.25) ;
+\draw (13.25,12.25) to[R] (11.25,12.25);
+\draw (16.75,16) to[short, -o] (15.5,16) ;
+\draw (16.75,16) to[C,l={ \LARGE $C_1$}] (16.75,14.25);
+\draw (16.75,14.25) to[C,l={ \LARGE $C_2$}] (16.75,12.25);
+\draw (16.75,12.25) to[short, -o] (15.5,12.25) ;
+\draw (18,16) to[R,l={ \LARGE $\frac{R}{p^2}$}] (18,12.25);
+\draw (16.75,12.25) to[short] (18,12.25);
+\draw (18,16) to[short] (16.75,16);
+\draw [<->, >=Stealth] (9.5,14) -- (10.5,14);
+\node [font=\LARGE] at (11,13.5) {};
+\draw [<->, >=Stealth] (14.25,14) -- (15.25,14);
+\node [font=\LARGE] at (4,14) {$p=\frac{C_1}{C_1+C_2}$};
+\draw (7.5,11.5) to[short, -o] (6.25,11.5) ;
+\draw (7.5,7.75) to[short, -o] (6.25,7.75) ;
+\draw (8.75,9.5) to[R,l={ \LARGE $R$}] (8.75,7.75);
+\draw (7.5,7.75) to[short] (8.75,7.75);
+\draw (8.75,9.5) to[short] (7.5,9.5);
+\draw (13.25,11.5) to[short, -o] (10.75,11.5) ;
+\draw (11.25,7.75) to[short, -o] (10.75,7.75) ;
+\draw (13.25,7.75) to[R] (11.25,7.75);
+\draw (16.75,11.5) to[short, -o] (15.5,11.5) ;
+\draw (16.75,7.75) to[short, -o] (15.5,7.75) ;
+\draw (18,11.5) to[R,l={ \LARGE $\frac{R}{p^2}$}] (18,7.75);
+\draw (16.75,7.75) to[short] (18,7.75);
+\draw (18,11.5) to[short] (16.75,11.5);
+\draw [<->, >=Stealth] (9.5,9.5) -- (10.5,9.5);
+\node [font=\LARGE] at (11,9) {};
+\draw [<->, >=Stealth] (14.25,9.5) -- (15.25,9.5);
+\node [font=\LARGE] at (4,9.5) {$p=\frac{L_2}{L_1+L_2}$};
+\draw (7.5,11.5) to[L,l={ \LARGE $L_1$} ] (7.5,9.5);
+\draw (7.5,9.5) to[L,l={ \LARGE $L_2$} ] (7.5,7.75);
+\draw (13.25,11.5) to[L,l={ \LARGE $L_1$} ] (13.25,9.75);
+\draw (13.25,9.75) to[L,l={ \LARGE $L_2$} ] (13.25,7.75);
+\draw (16.75,11.5) to[L,l={ \LARGE $L_1$} ] (16.75,9.75);
+\draw (16.75,9.75) to[L,l={ \LARGE $L_2$} ] (16.75,7.75);
+\end{circuitikz}
+}%
+
+
+\end{figure}
+\end{frame}
+\subsection{反馈}
+\begin{frame}{负反馈}
+负反馈放大器的分析流程：\begin{enumerate}
+    \item 分析连接方式，反馈网络直连放大网络输出则为并联，否则为串联；
+    \item 分析开环放大器参量。反馈网络画两遍，输入端反馈源置零，输出端反馈负载置零。求$r_{in}，r_{out}$需要输入/输出端置0，求$A$需要负载置0。
+    \item 求反馈系数：加x求y
+    \item 代入公式$A=\frac{A_o}{1+T}$,$w_{in,c}=(1+T)w_{in,o}$,$w_{out,c}=(1+T)w_{out,o}$
+\end{enumerate}
+\pause
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/feedback.png}
+\end{figure}
+\remind{反馈网络的21元素被忽略了，因为增益相对前馈很小}
+\end{frame}
+\begin{frame}{负反馈}
+    \begin{block}{例题}
+        已知运算放大器电压增益$A_{v0}$，BJT的跨导为$g_m$, 求电路的输入输出电阻和增益（$r_{bc}\,,r_{ce}\to\infty$）。
+        \begin{figure}[!ht]
+\centering
+\resizebox{.4\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (14.75,16) to[Tnpn, transistors/scale=1.19] (14.75,18.5);
+\draw (14.75,18.5) to[R=$R_C$] (14.75,20.25);
+\draw (10.75,16.75) to[short] (10,16.75);
+\draw (10,16.75) to[short] (10,18.5);
+\draw (10,18.5) to[short] (14.75,18.5);
+\draw (10.75,17.75) to[short, -o] (8.75,17.75) ;
+\draw (14.75,20.25) to[short] (14.75,20.75);
+\draw [short] (14.5,20.75) -- (15,20.75);
+\node [font=\LARGE] at (14.5,21.25) {$V_{CC}$};
+\draw (10,14.75) to[short, -o] (8.75,14.75) ;
+\draw (14.75,16) to[short, -o] (15.75,16) ;
+\draw (14.75,14.75) to[short, -o] (15.75,14.75) ;
+\draw (14.75,14.75) to[short] (14.75,13.75);
+\draw [short] (14.5,13.75) -- (15,13.75);
+\node [font=\LARGE] at (14.5,13.25) {$V_{EE}$};
+\draw (10,14.75) to (10,14.25) node[sground]{};
+\node [font=\LARGE] at (8.5,16.25) {in};
+\node [font=\LARGE] at (16.25,15.5) {out};
+\node [font=\LARGE] at (15,17.25) {$T$};
+\end{circuitikz}
+}%
+
+\end{figure}
+    \end{block}
+    \pause
+    提示：$T$是CC组态$\Rightarrow$电压缓冲器，电流放大器！
+\end{frame}
+
+\begin{frame}{负反馈}
+    \begin{block}{解答}
+首先把小信号模型代入进去，然后把运放和晶体管“翻”过来。
+
+\pause
+\begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (14.75,16) to[Tnpn, transistors/scale=1.19] (14.75,18.5);
+\draw (14.75,20.25) to[R,l={ \LARGE $R_C$}] (14.75,18.5);
+\draw (10.75,16.75) to[short] (10,16.75);
+\draw (10,16.75) to[short] (10,18.5);
+\draw (10,18.5) to[short] (14.75,18.5);
+\draw (10.75,17.75) to[short, -o] (8.75,17.75) ;
+\draw (10,14.75) to[short, -o] (8.75,14.75) ;
+\draw (14.75,16) to[short, -o] (15.75,16) ;
+\draw (14.75,14.75) to[short, -o] (15.75,14.75) ;
+\draw (10,14.75) to (10,14.25) node[sground]{};
+\node [font=\LARGE] at (8.5,16.25) {in};
+\node [font=\LARGE] at (16.25,15.5) {out};
+\node [font=\LARGE] at (15,17.25) {$T$};
+\draw (14,20) to (14,19.75) node[sground]{};
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (14.75,14.75) to (14.75,14.25) node[sground]{};
+\draw (14,20) to[short] (14,20.5);
+\draw (14,20.5) to[short] (14.75,20.5);
+\draw (14.75,20.5) to[short] (14.75,20);
+\draw (24,20.25) to[R,l={ \LARGE $R_C$}] (24,18.5);
+\draw (19.25,16.75) to[short] (19.25,18.5);
+\draw (19.25,18.5) to[short] (24,18.5);
+\draw (19.25,17.75) to[short, -o] (18,17.75) ;
+\draw (19.25,14.75) to[short, -o] (18,14.75) ;
+\draw (24,16) to[short, -o] (25,16) ;
+\draw (24,14.75) to[short, -o] (25,14.75) ;
+\draw (19.25,14.75) to (19.25,14.25) node[sground]{};
+\node [font=\LARGE] at (17.75,16.25) {in};
+\node [font=\LARGE] at (25.5,15.5) {out};
+\draw (23.25,20) to (23.25,19.75) node[sground]{};
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (24,14.75) to (24,14.25) node[sground]{};
+\draw (23.25,20) to[short] (23.25,20.5);
+\draw (23.25,20.5) to[short] (24,20.5);
+\draw (24,20.5) to[short] (24,20);
+\draw (21.75,18) to[american voltage source] (21.75,16.25);
+\draw [->, >=Stealth] (20,17) -- (20,17.5);
+\node [font=\LARGE] at (20.5,17.25) {$v_d$};
+\node [font=\LARGE] at (21,16.5) {$A_vv_d$};
+\draw (21.75,16.25) to (21.75,16) node[sground]{};
+\draw (24,18.5) to[american current source,l={ \LARGE $g_m v_{be}$}] (24,16);
+\draw (19.25,17.75) to[short, -o] (20,17.75) ;
+\draw (19.25,16.75) to[short, -o] (20,16.75) ;
+\draw (24,16) to[short, -o] (23,16) ;
+\draw (21.75,18) to[short, -o] (23,18) ;
+\draw [->, >=Stealth] (23,17.75) -- (23,16.25);
+\node [font=\LARGE] at (22.5,16.75) {$v_{be}$};
+\draw (30.5,16.5) to[R,l={ \LARGE $R_C$}] (30.5,14.75);
+\draw (28.25,19) to[short, -o] (27,19) ;
+\draw (33,19) to[short, -o] (34,19) ;
+\node [font=\LARGE] at (27,16.75) {in};
+\node [font=\LARGE] at (34.5,16.75) {out};
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (30.5,19) to[american voltage source] (30.5,17.5);
+\draw [->, >=Stealth] (29,18.75) -- (29,18.25);
+\node [font=\LARGE] at (29.5,18.5) {$v_d$};
+\node [font=\LARGE] at (31.75,18.25) {$-A_vv_d$};
+\draw (30.5,17.5) to (30.5,17.25) node[sground]{};
+\draw (28.25,19) to[short, -o] (29,19) ;
+\draw (28.25,18) to[short, -o] (29,18) ;
+\draw (30.5,14.75) to[short, -o] (27,14.75) ;
+\draw (30.5,14.75) to[short, -o] (34,14.75) ;
+\draw [->, >=Stealth] (31.25,19) -- (32.25,19);
+\node [font=\LARGE] at (31.75,19.75) {$v_{be}$};
+\draw (28.25,18) to[short] (28.25,16.5);
+\draw (28.25,16.5) to[short] (30.5,16.5);
+\draw (29.25,14.75) to (29.25,14.25) node[sground]{};
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (12.25,17.25) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (10.75,16.75);
+\draw  (opamp2.-) to[short] (10.75,17.75);
+\draw (13.45,17.25) to[short](13.75,17.25);
+\draw (30.5,16.5) to[short] (33,16.5);
+\draw (30.5,19) to[short, -o] (31,19) ;
+\draw (33,19) to[short, -o] (32.5,19) ;
+\draw (33,16.5) to[american current source] (33,19);
+\node [font=\LARGE] at (34.25,17.75) {$g_mv_{be}$};
+\end{circuitikz}
+}%
+\end{figure}
+\pause
+
+显然这是个\textcolor{red}{串串负反馈}.
+    \end{block}
+
+\end{frame}
+
+\begin{frame}{负反馈}
+    \begin{block}{解答}
+        求解开环放大器的输入输出电阻
+    \begin{columns}
+        \column{0.46\textwidth}
+        \begin{figure}[!t]
+\centering
+\resizebox{.9\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (29.25,16.5) to[R,l={ \LARGE $R_C$}] (29.25,14.75);
+\draw (28.25,19) to[short, -o] (27,19) ;
+\draw (33,19) to[short, -o] (34,19) ;
+\node [font=\LARGE] at (27,16.75) {in};
+\node [font=\LARGE] at (34.5,16.75) {out};
+
+\draw (30.5,19) to[american voltage source] (30.5,17.5);
+\draw [->, >=Stealth] (29,18.75) -- (29,18.25);
+\node [font=\LARGE] at (29.5,18.5) {$0$};
+\node [font=\LARGE] at (31.25,18.25) {$0$};
+\draw (30.5,17.5) to (30.5,17.25) node[sground]{};
+\draw (28.25,19) to[short, -o] (29,19) ;
+\draw (28.25,18) to[short, -o] (29,18) ;
+\draw (29.25,14.75) to[short, -o] (27,14.75)--(27,19) ;
+\draw (32,14.75) to[short, -o] (34,14.75) ;
+\draw [->, >=Stealth] (31.25,19) -- (32.25,19);
+\node [font=\LARGE] at (31.75,19.5) {$v_{be}=-v_{out}$};
+\draw (28.25,18) to[short] (28.25,16.5);
+\draw (28.25,16.5) to[short] (29.25,16.5);
+\draw (28.5,14.75) to (28.5,14.25) node[sground]{};
+\draw (30.5,19) to[short, -o] (31,19) ;
+\draw (33,19) to[short, -o] (32.5,19) ;
+\draw (33,19) to[american current source] (33,16.5);
+\node [font=\LARGE] at (34.25,17.75) {$g_mv_{out}$};
+\draw (32,16.5) to[R,l={ \LARGE $R_C$}] (32,14.75);
+\draw (33,14.75) to (33,14.25) node[sground]{};
+\draw (32,16.5) to[short] (33,16.5);
+\end{circuitikz}
+}%
+
+\end{figure}
+\pause
+$$
+\begin{aligned}
+    i_{out}&=g_mv_{out}\\
+    \pause
+r_{out,o}&=\frac{v_{out}}{i_{out}}=\frac{1}{g_m}\\
+\end{aligned}
+$$
+\pause
+\column{0.46\textwidth}
+\begin{figure}[!t]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (29.25,16.5) to[R,l={ \LARGE $R_C$}] (29.25,14.75);
+\draw (28.25,19) to[short, -o] (27,19) ;
+\draw (33,19) to[short, -o] (34,19) ;
+\node [font=\LARGE] at (27.5,16.75) {in};
+\node [font=\LARGE] at (34.5,16.75) {out};
+
+\draw (30.5,19) to[american voltage source] (30.5,17.5);
+\draw [->, >=Stealth] (29,18.75) -- (29,18.25);
+\node [font=\LARGE] at (29.5,18.5) {$v_d$};
+\node [font=\LARGE] at (31.75,18.25) {$-A_vv_d$};
+\draw (30.5,17.5) to (30.5,17.25) node[sground]{};
+\draw (28.25,19) to[short, -o] (29,19) ;
+\draw (28.25,18) to[short, -o] (29,18) ;
+\draw (29.25,14.75) to[short, -o] (27,14.75) ;
+\draw (32,14.75) to[short, -o] (34,14.75) ;
+\draw [->, >=Stealth] (31.25,19) -- (32.25,19);
+\node [font=\LARGE] at (31.75,19.75) {$v_{be}$};
+\draw (28.25,18) to[short] (28.25,16.5);
+\draw (28.25,16.5) to[short] (29.25,16.5);
+\draw (28.5,14.75) to (28.5,14.25) node[sground]{};
+
+\draw (30.5,19) to[short, -o] (31,19) ;
+\draw (33,19) to[short, -o] (32.5,19) ;
+\draw (33,16.5) to[american current source] (33,19);
+\node [font=\LARGE] at (32.25,17.25) {$g_mv_{be}$};
+\draw (32,16.5) to[R,l={ \LARGE $R_C$}] (32,14.75);
+\draw (33,14.75) to (33,14.25) node[sground]{};
+\draw (32,16.5) to[short] (33,16.5);
+\draw (34,19) to[short] (34,14.75);
+\draw [->, >=Stealth] (34,18) -- (34,17.5);
+\node [font=\LARGE] at (34.5,17.5) {$i_{out}$};
+\draw [->, >=Stealth] (27,18.5) -- (27,15.25);
+\node [font=\LARGE] at (26.25,16.75) {$v_{in}$};
+\end{circuitikz}
+}%
+
+\end{figure}
+\pause
+$$
+r_{in,o}=\infty
+$$
+    \end{columns}
+
+\end{block}
+\end{frame}
+\begin{frame}{负反馈}
+    \begin{block}{解答}
+        求解开环放大器的增益（压控流源放大器应该求$G_{m0}$）
+
+        \begin{columns}
+        \column{0.4\textwidth}
+\begin{figure}[!t]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (29.25,16.5) to[R,l={ \LARGE $R_C$}] (29.25,14.75);
+\draw (28.25,19) to[short, -o] (27,19) ;
+\draw (33,19) to[short, -o] (34,19) ;
+\node [font=\LARGE] at (27.5,16.75) {in};
+\node [font=\LARGE] at (34.5,16.75) {out};
+
+\draw (30.5,19) to[american voltage source] (30.5,17.5);
+\draw [->, >=Stealth] (29,18.75) -- (29,18.25);
+\node [font=\LARGE] at (29.5,18.5) {$v_d$};
+\node [font=\LARGE] at (31.75,18.25) {$-A_vv_d$};
+\draw (30.5,17.5) to (30.5,17.25) node[sground]{};
+\draw (28.25,19) to[short, -o] (29,19) ;
+\draw (28.25,18) to[short, -o] (29,18) ;
+\draw (29.25,14.75) to[short, -o] (27,14.75) ;
+\draw (32,14.75) to[short, -o] (34,14.75) ;
+\draw [->, >=Stealth] (31.25,19) -- (32.25,19);
+\node [font=\LARGE] at (31.75,19.75) {$v_{be}$};
+\draw (28.25,18) to[short] (28.25,16.5);
+\draw (28.25,16.5) to[short] (29.25,16.5);
+\draw (28.5,14.75) to (28.5,14.25) node[sground]{};
+
+\draw (30.5,19) to[short, -o] (31,19) ;
+\draw (33,19) to[short, -o] (32.5,19) ;
+\draw (33,16.5) to[american current source] (33,19);
+\node [font=\LARGE] at (32.25,17.25) {$g_mv_{be}$};
+\draw (32,16.5) to[R,l={ \LARGE $R_C$}] (32,14.75);
+\draw (33,14.75) to (33,14.25) node[sground]{};
+\draw (32,16.5) to[short] (33,16.5);
+\draw (34,19) to[short] (34,14.75);
+\draw [->, >=Stealth] (34,18) -- (34,17.5);
+\node [font=\LARGE] at (34.5,17.5) {$i_{out}$};
+\draw [->, >=Stealth] (27,18.5) -- (27,15.25);
+\node [font=\LARGE] at (26.25,16.75) {$v_{in}$};
+\end{circuitikz}
+}%
+\end{figure}
+\column{0.5\linewidth}
+$$
+\begin{aligned}
+    A_vv_d&=A_vv_{in}\\
+    v_{be}&=-A_vv_{in}\\
+    i_{out}&=g_mv_{be}=-g_mA_vv_{in}\\
+    \pause
+    G_{m0}&=\frac{i_{out}}{v_{in}}=-g_mA_v
+\end{aligned}
+$$
+\end{columns}
+\pause
+    求解反馈系数：
+    \pause
+
+    $$
+    F=-R_C\pause \Rightarrow T=G_{m0}F=g_mA_vR_C
+    $$
+    \end{block}
+\end{frame}
+\begin{frame}{负反馈}   
+    \begin{block}{解答}
+        代入公式求解闭环放大器的参数：
+        $$
+        \begin{aligned}
+            G_{m,c}&= \frac{G_{m0}}{1+T}=\frac{g_mA_v}{1+g_mA_vR_C}\overset{\text{深度负反馈}}{=}\frac{1}{R_C}\\
+            r_{in,c}&=(1+T)r_{in,o}=\infty\\
+            r_{out,c}&=r_{out,o}(1+T)=\frac{1}{g_m}(1+g_mA_vR_C)\overset{\text{深度负反馈}}{=} \frac{R_C}{A_v}
+        \end{aligned}
+        $$
+    \end{block}
+\end{frame}
+\subsection{正反馈}
+\begin{frame}{负阻}
+    负阻分成\textcolor{red}{S型}和\textcolor{red}{N型}两种。这里的S和N是根据$i-v$曲线的形状来命名的。(纵轴$i$，横轴$v$)。
+    \pause
+
+    首先需要掌握负阻电路模型的识别。常见分成运放和晶体管两类。
+\end{frame}
+
+\begin{frame}{运放负阻}
+    \begin{columns}
+        \column{0.16\linewidth}
+        \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (8.5,14.75) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (7,14.25);
+\draw  (opamp2.-) to[short] (7,15.25);
+\draw (9.7,14.75) to[short](10,14.75);
+\draw (7,16.5) to[R,l={ \LARGE $R$}] (10,16.5);
+\draw (7,13.25) to[R,l={ \LARGE $R_2$}] (10,13.25);
+\draw (6.25,12.75) to[R,l={ \LARGE $R_1$}] (6.25,10.25);
+\draw (6.25,10.25) to[short, -o] (5,10.25) ;
+\draw (7,16.5) to[short, -o] (5,16.5) ;
+\draw (7,13.25) to[short] (6.25,13.25);
+\draw (6.25,13.25) to[short] (6.25,12.75);
+\draw (7,14.25) to[short] (6.25,14.25);
+\draw (6.25,14.25) to[short] (6.25,13.25);
+\draw (7,15.25) to[short] (6.25,15.25);
+\draw (6.25,15.25) to[short] (6.25,16.5);
+\draw (10,16.5) to[short] (10,13.25);
+\node at (6.25,13.25) [circ] {};
+\node at (10,14.75) [circ] {};
+\node at (6.25,16.5) [circ] {};
+\draw (6.25,10.25) to (6.25,10) node[sground]{};
+\node at (6.25,10.25) [circ] {};
+\end{circuitikz}
+}%
+
+
+\end{figure}
+\column{0.45\linewidth}
+
+\begin{figure}
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines=middle,
+    xlabel={$v$},
+    ylabel={$i$},
+    xmin=-5.5, xmax=5.5,
+    ymin=-2.5, ymax=2.5,
+    % grid=both,
+    xtick={},
+    ytick={},
+    xticklabels=\empty,
+yticklabels=\empty,
+    width=11cm,
+    height=7cm,
+    clip=false,
+]
+
+% --- 红色折线：依次连结四个点 ---
+\addplot[
+    red,
+    thick
+] coordinates {
+    (-4,-2)
+    (1,-1)
+    (-1,1)
+    (4,2)
+};
+
+% --- 黑色虚线：指定的几组连线 ---
+\addplot[black, dashed, thick] coordinates {(-1,1) (0,1)};
+\addplot[black, dashed, thick] coordinates {(-1,1) (-1,0)};
+\addplot[black, dashed, thick] coordinates {(-5,0) (-1,1)};
+\addplot[black, dashed, thick] coordinates {(5,0) (1,-1)};
+
+% --- 标注 ---
+\node[above] at (axis cs:5,0) {$+V_{\mathrm{sat}}$};
+\node[above right] at (axis cs:1,0) {$F V_{\mathrm{sat}}$};
+\node[right] at (axis cs:0,1) {$I_0$};
+
+\end{axis}
+\end{tikzpicture}}
+\end{figure}
+
+
+\end{columns}
+
+\hfill
+\begin{columns}
+\column{0.16\linewidth}
+\begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (8.5,14.75) node[op amp,yscale=-1] (opamp2) {};
+\draw (opamp2.-) to[short] (7,14.25);
+\draw  (opamp2.+) to[short] (7,15.25);
+\draw (9.7,14.75) to[short](10,14.75);
+\draw (7,16.5) to[R,l={ \LARGE $R$}] (10,16.5);
+\draw (7,13.25) to[R,l={ \LARGE $R_2$}] (10,13.25);
+\draw (6.25,12.75) to[R,l={ \LARGE $R_1$}] (6.25,10.25);
+\draw (6.25,10.25) to[short, -o] (5,10.25) ;
+\draw (7,16.5) to[short, -o] (5,16.5) ;
+\draw (7,13.25) to[short] (6.25,13.25);
+\draw (6.25,13.25) to[short] (6.25,12.75);
+\draw (7,14.25) to[short] (6.25,14.25);
+\draw (6.25,14.25) to[short] (6.25,13.25);
+\draw (7,15.25) to[short] (6.25,15.25);
+\draw (6.25,15.25) to[short] (6.25,16.5);
+\draw (10,16.5) to[short] (10,13.25);
+\node at (6.25,13.25) [circ] {};
+\node at (10,14.75) [circ] {};
+\node at (6.25,16.5) [circ] {};
+\draw (6.25,10.25) to (6.25,10) node[sground]{};
+\node at (6.25,10.25) [circ] {};
+\end{circuitikz}
+}%
+
+\end{figure}
+
+\column{0.45\linewidth}
+
+\begin{figure}
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines=middle,
+    xlabel={$v$},
+    ylabel={$i$},
+    xmin=-2.5, xmax=2.5,
+    ymin=-4.5, ymax=4.5,
+    % grid=both,
+    xtick={},
+    ytick={},
+    xticklabels=\empty,
+yticklabels=\empty,
+    width=11cm,
+    height=7cm,
+    clip=false,
+]
+
+% --- 红色折线：依次连结四个点 ---
+\addplot[
+    red,
+    thick
+] coordinates {
+    (-2,-2)
+    (-1,1)
+    (1,-1)
+    (2,2)
+};
+
+% --- 黑色虚线：指定的几组连线 ---
+
+\addplot[black, dashed, thick] coordinates {(-1,1) (0,4)};
+\addplot[black, dashed, thick] coordinates {(1,-1) (0,-4)};
+
+
+\end{axis}
+\end{tikzpicture}}
+\end{figure}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{晶体管负阻}
+    \begin{columns}
+        \column{0.46\linewidth}
+        S型：Shockly二极管
+        \begin{figure}[!ht]
+\centering
+\resizebox{0.5\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw [short] (7,15.25) -- (7,15.75);
+\draw [short] (7,15.75) -- (7.75,15.25);
+\draw [short] (7,15.25) -- (7,14.75);
+\draw (7.75,15.75) to[short] (7.75,14.75);
+\draw (7.75,15.25) to[short, -o] (6.25,15.25) ;
+\draw (7.75,15.25) to[short, -o] (8.5,15.25) ;
+\end{circuitikz}
+}%
+
+\end{figure}
+\begin{figure}[!ht]
+\centering
+\resizebox{0.8\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw(0,0)node[pnp,anchor=B,rotate=90](T1){};
+\draw(T1.C)node[npn,anchor=B,rotate=-90,yscale=-1](T2){};
+\draw(T1.E)to[short,-o]++(-0.5,0);
+\draw(T2.E)to[short,-o]++(0.5,0);
+\end{circuitikz}
+}%
+
+
+\end{figure}
+        \column{0.46\linewidth}
+        \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw [->, >=Stealth] (10,13.75) -- (10,18.75);
+\draw [->, >=Stealth] (10,13.75) -- (15,13.75);
+\draw [ color={rgb,255:red,255; green,38; blue,0}, line width=1pt, short] (10,13.75) -- (13,14.5);
+\draw [ color={rgb,255:red,255; green,38; blue,0}, line width=1pt, short] (13,14.5) -- (11.25,15);
+\draw [ color={rgb,255:red,255; green,38; blue,0}, line width=1pt, short] (11.25,15) -- (12.5,18.5);
+\node [font=\LARGE] at (9.5,18.75) {$i$};
+\node [font=\LARGE] at (15.5,13.75) {$v$};
+\end{circuitikz}
+}%
+
+\end{figure}
+    \end{columns}
+    \end{frame}
+    \begin{frame}{晶体管负阻}
+    \begin{columns}
+        \column{0.46\linewidth}
+        N型：双非门环
+        \begin{figure}[!ht]
+\centering
+\resizebox{0.8\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (8.5,18.75) to[Tpmos, transistors/scale=1.02] (8.5,21.25);
+\draw (11.5,18.75) to[Tpmos, transistors/scale=1.02] (11.5,21.25);
+\draw (8.5,16.25) to[Tnmos, transistors/scale=1.02] (8.5,18.75);
+\draw (11.5,16.25) to[Tnmos, transistors/scale=1.02] (11.5,18.75);
+\draw (8.5,18.75) to[short] (10.5,18.75);
+\draw (10.5,18.75) to[short] (10.5,20);
+\draw (10.5,18.75) to[short] (10.5,17.5);
+\draw (11.5,18.75) to[short] (12.5,18.75);
+\draw (7.5,20) to[short] (7.5,17.5);
+\draw (7.5,18.75) to[short] (6.5,18.75);
+\draw (6.5,20.75) to[short] (6.5,18.75);
+\draw (6.5,20.75) to[short] (12.5,20.75);
+\draw (12.5,20) to[short] (12.5,18.75);
+\draw (12.5,20.75) to[short] (12.5,20);
+\draw (6.5,18.75) to[short, -o] (6.25,18.75) ;
+\draw (11.5,16.25) to[short, -o] (6.25,16.25) ;
+\draw (7.25,16.25) to (7.25,16) node[sground]{};
+\draw (8.25,21.25) to[short] (8.75,21.25);
+\draw (11.25,21.25) to[short] (11.75,21.25);
+\node [font=\LARGE] at (8.5,21.75) {$V_{DD}$};
+\node [font=\LARGE] at (11.5,21.75) {$V_{DD}$};
+\node [font=\LARGE] at (9,20) {$M_2$};
+\node [font=\LARGE] at (12,20) {$M_4$};
+\node [font=\LARGE] at (9,17.5) {$M_1$};
+\node [font=\LARGE] at (12,17.5) {$M_3$};
+\end{circuitikz}
+}%
+
+\end{figure}
+\column{0.46\linewidth}
+\begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw [->, >=Stealth] (10,13.75) -- (10,18.75);
+\draw [->, >=Stealth] (10,16.25) -- (15,16.25);
+\draw [ color={rgb,255:red,255; green,38; blue,0}, line width=1pt, short] (10,16.25) -- (11.25,18);
+\node [font=\LARGE] at (9.5,18.75) {$i$};
+\node [font=\LARGE] at (15.5,16.25) {$v$};
+\draw [ color={rgb,255:red,255; green,38; blue,0}, line width=1pt, short] (11.25,18) -- (13.25,14.5);
+\draw [ color={rgb,255:red,255; green,38; blue,0}, line width=1pt, short] (13.25,14.5) -- (14.5,16.25);
+\node [font=\large] at (9,17.5) {$M_3$欧姆};
+\node [font=\large] at (9,17) {$M_4$截止};
+\node [font=\large] at (12.5,17.75) {$M_3$恒流};
+\node [font=\large] at (12.5,17.25){$M_4$恒流};
+\node [font=\large] at (14.5,14.75) {$M_3$截止};
+\node [font=\large] at (14.5,14.25) {$M_4$欧姆};
+\end{circuitikz}
+}%
+
+\end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}{负阻的应用}
+记忆：
+\begin{table}
+    \centering
+    \begin{tabular}{r|c c}
+    \toprule
+    \textbf{应用} & \textbf{S型} & \textbf{N型} \\
+    \midrule
+    \textbf{DRAM} & 电感 & 电容\footnote{记忆方法：两个非门是稳定的} \\
+    \textbf{张弛振荡器} & 电容 & 电感 \\
+    \textbf{正弦振荡器} & 串联LC\footnote{记忆方法：S for Serial} & 并联LC \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+分析方法：拿到电路先站在L/C上看是N还是S型，再看根据对应关系判断应用类型，最后算具体数据画图
+\end{frame}
+
+\begin{frame}{负阻的应用}
+    \begin{block}{练习}
+        画出$v-t$图线：
+        \begin{columns}
+            \column{0.23\linewidth}
+            \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (12.75,15.75) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (11.25,15.25);
+\draw  (opamp2.-) to[short] (11.25,16.25);
+\draw (13.95,15.75) to[short](14.25,15.75);
+\draw (11.25,16.25) to[short] (11.25,17.25);
+\draw (11.25,17.25) to[R,l={ \large $R$}] (14.25,17.25);
+\draw (14.25,17.25) to[short] (14.25,14.25);
+\draw (14.25,14.25) to[R,l={ \large $R_1$}] (11.25,14.25);
+\draw (11.25,14.25) to[R,l={ \large $R_2$}] (11.25,12);
+\draw (11.25,15.25) to[short] (11.25,14.25);
+\draw (11.25,12) to[short] (10,12);
+\draw (11.25,17.25) to[short] (10,17.25);
+\node at (11.25,17.25) [circ] {};
+\node at (14.25,15.75) [circ] {};
+\node at (11.25,14.25) [circ] {};
+\draw (10,17.25) to[C] (10,12);
+\draw (11.25,12) to (11.25,11.75) node[sground]{};
+\draw (10,17.25) to[short, -o] (8.75,17.25) ;
+\node at (10,17.25) [circ] {};
+\draw (8.25,17.25) to[short, -o] (8.25,17.25) node {$v$};
+\end{circuitikz}
+}%
+
+\end{figure}
+            \column{0.23\linewidth}
+            \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (12.75,15.75) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (11.25,15.25);
+\draw  (opamp2.-) to[short] (11.25,16.25);
+\draw (13.95,15.75) to[short](14.25,15.75);
+\draw (11.25,16.25) to[short] (11.25,17.25);
+\draw (11.25,17.25) to[R,l={ \large $R$}] (14.25,17.25);
+\draw (14.25,17.25) to[short] (14.25,14.25);
+\draw (14.25,14.25) to[R,l={ \large $R_1$}] (11.25,14.25);
+\draw (11.25,14.25) to[R,l={ \large $R_2$}] (11.25,12);
+\draw (11.25,15.25) to[short] (11.25,14.25);
+\draw (11.25,12) to[short] (10,12);
+\draw (11.25,17.25) to[short] (10,17.25);
+\node at (11.25,17.25) [circ] {};
+\node at (14.25,15.75) [circ] {};
+\node at (11.25,14.25) [circ] {};
+\draw (11.25,12) to (11.25,11.75) node[sground]{};
+\draw (10,17.25) to[short, -o] (8.75,17.25) ;
+\node at (10,17.25) [circ] {};
+\draw (8.25,17.25) to[short, -o] (8.25,17.25) node {$v$};
+\draw (10,17.25) to[L ] (10,12);
+\end{circuitikz}
+}%
+
+\end{figure}
+            \column{0.23\linewidth}
+            \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (11.25,16.25) to[short] (11.25,17.25);
+\draw (11.25,17.25) to[R,l={ \large $R$}] (14.25,17.25);
+\draw (14.25,17.25) to[short] (14.25,14.25);
+\draw (14.25,14.25) to[R,l={ \large $R_1$}] (11.25,14.25);
+\draw (11.25,14.25) to[R,l={ \large $R_2$}] (11.25,12);
+\draw (11.25,15.25) to[short] (11.25,14.25);
+\draw (11.25,12) to[short] (10,12);
+\draw (11.25,17.25) to[short] (10,17.25);
+\node at (11.25,17.25) [circ] {};
+\node at (14.25,15.75) [circ] {};
+\node at (11.25,14.25) [circ] {};
+\draw (11.25,12) to (11.25,11.75) node[sground]{};
+\draw (10,17.25) to[short, -o] (8.75,17.25) ;
+\node at (10,17.25) [circ] {};
+\draw (8.25,17.25) to[short, -o] (8.25,17.25) node {$v$};
+\draw (12.75,15.75) node[op amp,scale=1, yscale=-1 ] (opamp2) {};
+\draw (opamp2.+) to[short] (11.25,16.25);
+\draw  (opamp2.-) to[short] (11.25,15.25);
+\draw (13.95,15.75) to[short](14.25,15.75);
+\draw (10,17.25) to[C] (10,12);
+\end{circuitikz}
+}%
+
+\label{fig:my_label}
+\end{figure}
+            \column{0.23\linewidth}
+            \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (11.25,16.25) to[short] (11.25,17.25);
+\draw (11.25,17.25) to[R,l={ \large $R$}] (14.25,17.25);
+\draw (14.25,17.25) to[short] (14.25,14.25);
+\draw (14.25,14.25) to[R,l={ \large $R_1$}] (11.25,14.25);
+\draw (11.25,14.25) to[R,l={ \large $R_2$}] (11.25,12);
+\draw (11.25,15.25) to[short] (11.25,14.25);
+\draw (11.25,12) to[short] (10,12);
+\draw (11.25,17.25) to[short] (10,17.25);
+\node at (11.25,17.25) [circ] {};
+\node at (14.25,15.75) [circ] {};
+\node at (11.25,14.25) [circ] {};
+\draw (11.25,12) to (11.25,11.75) node[sground]{};
+\draw (10,17.25) to[short, -o] (8.75,17.25) ;
+\node at (10,17.25) [circ] {};
+\draw (8.25,17.25) to[short, -o] (8.25,17.25) node {$v$};
+\draw (12.75,15.75) node[op amp,scale=1, yscale=-1 ] (opamp2) {};
+\draw (opamp2.+) to[short] (11.25,16.25);
+\draw  (opamp2.-) to[short] (11.25,15.25);
+\draw (13.95,15.75) to[short](14.25,15.75);
+\draw (10,17.25) to[L ] (10,12);
+\end{circuitikz}
+}%
+
+\label{fig:my_label}
+\end{figure}
+\end{columns}
+    \end{block}
+\end{frame}
+\begin{frame}{振荡器}
+    振荡器主要两种分析方法：
+    \vspace{0.5cm}
+    \begin{columns}
+        \column{0.46\linewidth}
+        \begin{center}
+            \textbf{负阻法}
+        \end{center}
+
+        电路结构：S型对接串联RLC/N型对接并联RLC
+        \begin{itemize}
+            \item \textbf{起振条件}:$r_{n}>R_s$($g_{n}>G_p$)
+            \item \textbf{平衡条件}:$r_{n}=R_s$($g_{n}=G_p$)
+            \item \textbf{稳定条件}:$r_{n}/g_{n}$随着振幅增加而减小
+        \end{itemize}
+        \column{0.46\linewidth}
+        \begin{center}
+            \textbf{正反馈法}
+        \end{center}
+        
+        电路结构：理想受控源对接反馈网络\footnote{和负反馈不同，这里除了受控源所有东西全扔进反馈网络}
+        \begin{itemize}
+            \item \textbf{起振条件}: $|A_0F|>1\,,\varphi_{A_0F}(\omega_{osc})=0$
+            \item \textbf{平衡条件}: $\bar{A}F=1\,,\varphi_{\bar{A}F}(\omega_{osc})=0$
+            \item \textbf{稳定条件}: $\partial_V|AF|<0$,$\partial_\omega\varphi_{AF}<0$
+        \end{itemize}
+        
+    \end{columns}
+\end{frame}
+% 仍然复用你上面的电路图命令 \OscCircuitFigure
+
+% ===================== (a) =====================
+\begin{frame}[t]{振荡器}
+\begin{block}{例题（a）}
+\scriptsize
+小明设计了如图 5 所示的二阶有源 RC 滤波器，假设运放为理想运放。\\[0.2em]
+以 $v_s(t)$ 为输入、以 $v_o(t)$ 为输出，给出详细分析过程，最终获得该二阶滤波器的相量域传递函数并整理为标准形态：
+\[
+H(s)=\frac{v_o}{v_s}=H_0\frac{\cdots}{s^2+2\xi\omega_0 s+\omega_0^2},\quad s=j\omega .
+\]
+由传递函数形态说明滤波器类型，并给出系统参量 $\xi,\ \omega_0,\ H_0$ 与电路参量的关系式。
+
+\vspace{0.4em}
+\OscCircuitFigure
+\end{block}
+\end{frame}
+
+% ===================== (b) =====================
+\begin{frame}[t]{振荡器}
+\begin{block}{例题（b）}
+\scriptsize
+调试时发现改变 $R_f$ 时，出现无需输入（$v_s(t)=0$）就有正弦波形 $v_o(t)$ 输出。\\[0.2em]
+小明认为：阻尼系数 $\xi<0$ 使二阶系统特征根进入右半平面而不稳定，从而把自激振荡起振条件确定为 $\xi<0$。\\[0.2em]
+请说明调参时 $R_f$ 与 $R_r$ 满足的关系式，导致无需输入即可自激振荡。\\[0.2em]
+且小明确认振荡频率为系统自由振荡频率：$\omega_{\mathrm{osc}}=\omega_0$。\\[0.2em]
+请用系统函数（系统方程）法给出用电路参量表述的 $\omega_{\mathrm{osc}}$ 与起振条件表达式。
+
+\vspace{0.4em}
+\OscCircuitFigure
+\end{block}
+\end{frame}
+
+% ===================== (c) =====================
+\begin{frame}[t]{振荡器}
+\begin{block}{例题（c）}
+\scriptsize
+既然电路已经自激振荡，小明希望从正反馈振荡器角度分析。\\[0.2em]
+将 $v_s(t)$ 置零（短路处理），找到图示电路中的理想受控源，其余元件归入反馈网络。\\[0.2em]
+用正反馈原理起振条件 $AF>1$：由相位条件求 $\omega_{\mathrm{osc}}$，由幅度条件求 $R_f$ 与 $R_r$ 的关系式。
+
+\vspace{0.4em}
+\OscCircuitFigure
+\end{block}
+\end{frame}
+
+% ===================== (d) =====================
+\begin{frame}[t]{振荡器}
+\begin{block}{例题（d）}
+\scriptsize
+小明还希望从负阻原理解读该振荡电路。\\[0.2em]
+先将 $C_1$ 抽取，对虚线所示单端口加流求压（或加压求流），得到端口等效阻抗 $Z_{\mathrm{in}}$（或导纳 $Y_{\mathrm{in}}$）。\\[0.2em]
+将 $C_1$ 与 $Z_{\mathrm{in}}$（或 $Y_{\mathrm{in}}$）对接后形成的串联总阻抗（或并联总导纳）：
+由虚部条件求 $\omega_{\mathrm{osc}}$，由实部条件求 $R_f$ 与 $R_r$ 的关系式。
+
+\vspace{0.4em}
+\OscCircuitFigure
+\end{block}
+\end{frame}
+
+% ===================== (e) =====================
+\begin{frame}[t]{振荡器}
+\begin{block}{例题（e）}
+\scriptsize
+对比 b) 系统方程法、c) 正反馈原理、d) 负阻原理三种起振分析结论，确认三种方法等价。\\[0.2em]
+代入参量
+\[
+R_1=3.3\,\mathrm{k}\Omega,\ C_1=0.1\,\mu\mathrm{F},\ 
+R_2=1\,\mathrm{k}\Omega,\ C_2=0.1\,\mu\mathrm{F},\ 
+R_r=1\,\mathrm{k}\Omega
+\]
+说明 $R_f$ 取多大时会自激振荡，并给出输出正弦波振荡频率（Hz）。
+
+\vspace{0.4em}
+\OscCircuitFigure
+\end{block}
+\end{frame}
+
+
+
+
+\begin{frame}{振荡器}
+    改进方法：为了避免切顶，通过非线性元件让$AF$变化更平滑（比如二极管）
+    \begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (10.25,14.75) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (8.75,14.25);
+\draw  (opamp2.-) to[short] (8.75,15.25);
+\draw (11.45,14.75) to[short](11.75,14.75);
+\draw (7.5,13) to[R] (7.5,11);
+\draw (8.25,13) to[C] (8.25,11);
+\draw (8.25,13) to[R] (10.5,13);
+\draw (10.5,13) to[C] (11.75,13);
+\draw (7.5,13) to[short] (8.25,13);
+\draw (8.25,13) to[short] (8.25,14.25);
+\draw (8.25,14.25) to[short] (8.75,14.25);
+\draw (7.5,11) to[short] (8.25,11);
+\draw (11.75,13) to[short] (11.75,14.75);
+\node at (8.25,13) [circ] {};
+\draw (8,11) to (8,10.75) node[sground]{};
+\draw (8.75,15.25) to[R,l={ \large $R_1$}] (6.25,15.25);
+\draw (8.75,16.5) to[R,l={ \large $R_2$}] (11.75,16.5);
+\draw (11.75,16.5) to[short] (11.75,14.75);
+\draw (8.75,16.5) to[short] (8.75,15.25);
+\draw (6.25,15.25) to (6.25,14.25) node[sground]{};
+\node at (11.75,14.75) [circ] {};
+\draw (17.5,13.5) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (16,13);
+\draw  (opamp2.-) to[short] (16,14);
+\draw (18.7,13.5) to[short](19,13.5);
+\draw (14.75,11.75) to[R] (14.75,9.75);
+\draw (15.5,11.75) to[C] (15.5,9.75);
+\draw (15.5,11.75) to[R] (17.75,11.75);
+\draw (17.75,11.75) to[C] (19,11.75);
+\draw (14.75,11.75) to[short] (15.5,11.75);
+\draw (15.5,11.75) to[short] (15.5,13);
+\draw (15.5,13) to[short] (16,13);
+\draw (14.75,9.75) to[short] (15.5,9.75);
+\draw (19,11.75) to[short] (19,13.5);
+\node at (15.5,11.75) [circ] {};
+\draw (15.25,9.75) to (15.25,9.5) node[sground]{};
+\draw (16,14) to[R,l={ \large $R_1$}] (13.5,14);
+\draw (16,15.25) to[R,l={ \large $R_2$}] (19,15.25);
+\draw (19,15.25) to[short] (19,13.5);
+\draw (16,15.25) to[short] (16,14);
+\draw (13.5,14) to (13.5,13) node[sground]{};
+\node at (19,13.5) [circ] {};
+\draw (16,16.5) to[D] (17.75,16.5);
+\draw (16,16.5) to[D] (14.25,16.5);
+\draw (16,17.5) to[R,l={ \large $R_3$}] (14.25,17.5);
+\draw (16,17.5) to[R,l={ \large $R_3$}] (17.75,17.5);
+\draw (17.75,17.5) to[R,l={ \large $R_4$}] (19.25,17.5);
+\draw (14.25,17.5) to[R,l={ \large $R_4$}] (12.5,17.5);
+\draw (14.25,17.5) to[short] (14.25,16.5);
+\draw (17.75,17.5) to[short] (17.75,16.5);
+\draw (16,16.5) to[short] (16,15.25);
+\draw (16,17.5) to[short] (16,18.25);
+\draw (16,18.25) to[short] (19,18.25);
+\draw (19,18.25) to[short] (19,15);
+\node at (16,15.25) [circ] {};
+\node at (16,14) [circ] {};
+\node at (19,15.25) [circ] {};
+\draw (12.5,17.5) to[short] (12.5,18.75);
+\draw (19.25,17.5) to[short] (19.25,18.75);
+\draw (12.25,18.75) to[short] (12.75,18.75);
+\draw (19,18.75) to[short] (19.5,18.75);
+\node [font=\large] at (12.25,19) {$V_{CC}$};
+\node [font=\large] at (19.25,19) {$V_{EE}$};
+\draw (24,14.75) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (22.5,14.25);
+\draw  (opamp2.-) to[short] (22.5,15.25);
+\draw (25.2,14.75) to[short](25.5,14.75);
+\draw (21.25,13) to[R] (21.25,11);
+\draw (22,13) to[C] (22,11);
+\draw (22,13) to[R] (25,13);
+\draw (25,13) to[C] (27.25,13);
+\draw (21.25,13) to[short] (22,13);
+\draw (22,13) to[short] (22,14.25);
+\draw (22,14.25) to[short] (22.5,14.25);
+\draw (21.25,11) to[short] (22,11);
+\draw (27.25,13) to[short] (27.25,14.75);
+\node at (22,13) [circ] {};
+\draw (21.75,11) to (21.75,10.75) node[sground]{};
+\draw (22.5,15.25) to[R,l={ \large $R_1$}] (20,15.25);
+\draw (22.5,16.5) to[R,l={ \large $R_2$}] (24.25,16.5);
+\draw (27.25,16.5) to[short] (27.25,14.75);
+\draw (22.5,16.5) to[short] (22.5,15.25);
+\draw (20,15.25) to (20,14.25) node[sground]{};
+\node at (27.25,14.75) [circ] {};
+\draw (24.25,16.5) to[R,l={ \large $R_0$}] (27.25,16.5);
+\draw (24.5,15.75) to[D] (27,15.75);
+\draw (27,17.5) to[D] (24.5,17.5);
+\draw (27,17.5) to[short] (27,15.75);
+\draw (24.5,17.5) to[short] (24.5,15.75);
+\draw (25.5,14.75) to[short] (27.25,14.75);
+\node at (24.5,16.5) [circ] {};
+\node at (27,16.5) [circ] {};
+\end{circuitikz}
+}%
+\end{figure}
+\end{frame}
+\begin{frame}{振荡器}
+    \begin{figure}
+        \centering
+        \resizebox{0.6\textwidth}{!}{%
+        \begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    xmin = -22, xmax = 22,
+    ymin = -22, ymax = 22,
+    xlabel = {$V_f(t)$},
+    ylabel = {$V_o(t)$},
+    samples = 200,
+    domain = -20:20,
+    legend style={
+        at={(0.52,0.4)},
+        anchor=north west,
+        draw=none
+    },
+    legend cell align=left,
+    font=\small
+]
+
+% 蓝色曲线：加入非线性元件的放大器传输曲线
+\addplot[
+    blue,
+    thick
+] {7*rad(atan(x/7))};
+\addlegendentry{加入非线性元件}
+
+
+% 红色折线：原始放大器传输曲线
+\addplot[
+    red,
+    thick
+] coordinates {
+    (-20,-15)
+    (-15,-15)
+    (15,15)
+    (20,15)
+};
+\addlegendentry{原始传输曲线}
+% 紫色虚线：AF = 1 的临界线（只加一次图例）
+\addplot[
+    TsinghuaPurple,
+    dashed,
+    thick
+] {0.8*x};
+\addlegendentry{$AF=1$临界线}
+% 辅助虚线（黑色）
+\addplot[
+    black,
+    dashed,
+    thick
+] coordinates {
+    (-6.65, -5.32)
+    (0,    -5.32)
+};
+
+\addplot[
+    black,
+    dashed,
+    thick
+] coordinates {
+    (6.65, 5.32)
+    (0,    5.32)
+};
+
+% 切点标记（黑色实心圆）
+\addplot[
+    only marks,
+    mark=*,
+    mark size=2pt,
+    black
+] coordinates {
+    (6.65, 5.32)
+    (-6.65,    -5.32)
+};
+\addplot[
+    blue,
+    very thick,
+    ->,
+]
+coordinates {
+    (15,14)
+    (15,9)
+};
+\addplot[
+    blue,
+    very thick,
+    ->,
+]
+coordinates {
+    (-15,-14)
+    (-15,-9)
+};
+\end{axis}
+
+\end{tikzpicture}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[t]{文氏电桥振荡器}
+\begin{columns}[T,onlytextwidth]
+% -------- 左：题目文字 --------
+\begin{column}{0.60\textwidth}
+\begin{block}{例题}
+\scriptsize
+（16 分）暂不考虑上面这个网络，图为文氏电桥正弦波振荡器。
+\vspace{0.4em}
+
+\textbf{(a)} 请分析说明该文氏电桥振荡器的起振条件和振荡频率。之后代入
+$R_1=10\,\mathrm{k}\Omega,\ R_2=22\,\mathrm{k}\Omega,\ R=158\,\mathrm{k}\Omega,\ C=1\,\mathrm{nF}$
+具体数值，说明振荡条件满足，给出振荡频率。
+\vspace{0.4em}
+
+\textbf{(b)} 在示波器上观测到输出正弦波形 $v_o(t)$ 存在较为明显的非线性失真（切顶）现象。
+为了确保输出正弦波形的纯度，设计了额外的负反馈网络，即图中上边的网络。
+请研究该虚框负反馈网络，由此说明为什么添加该虚框负反馈网络后，输出正弦波将不再切顶；
+并由此给出无切顶输出正弦波的幅度大小。
+
+分析时，两个二极管采用正偏 $0.7\mathrm{V}$ 恒压源、反偏截止开路的电路模型；
+同时 $R_3=3\,\mathrm{k}\Omega,\ R_4=20\,\mathrm{k}\Omega,\ +V_{CC}=+15\mathrm{V},\ -V_{EE}=-15\mathrm{V}$。
+提示：起振分析传递系数为微分线性系数。
+\end{block}
+\end{column}
+
+% -------- 右：留白给你画图 --------
+\begin{column}{0.40\textwidth}
+\vspace{0.5em}
+\begin{figure}
+    \centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (17.5,13.5) node[op amp,scale=1] (opamp2) {};
+\draw (opamp2.+) to[short] (16,13);
+\draw  (opamp2.-) to[short] (16,14);
+\draw (18.7,13.5) to[short](19,13.5);
+\draw (14.75,9.75) to[R=$R$] (14.75,11.75);
+\draw (15.5,11.75) to[C=$C$] (15.5,9.75);
+\draw (15.5,11.75) to[R=$R$] (17.75,11.75);
+\draw (17.75,11.75) to[C=$C$] (19,11.75);
+\draw (14.75,11.75) to[short] (15.5,11.75);
+\draw (15.5,11.75) to[short] (15.5,13);
+\draw (15.5,13) to[short] (16,13);
+\draw (14.75,9.75) to[short] (15.5,9.75);
+\draw (19,11.75) to[short] (19,13.5);
+\node at (15.5,11.75) [circ] {};
+\draw (15.25,9.75) to (15.25,9.5) node[sground]{};
+\draw (16,14) to[R,l={ \large $R_1$}] (13.5,14);
+\draw (16,15.25) to[R,l={ \large $R_2$}] (19,15.25);
+\draw (19,15.25) to[short] (19,13.5);
+\draw (16,15.25) to[short] (16,14);
+\draw (13.5,14) to (13.5,13) node[sground]{};
+\node at (19,13.5) [circ] {};
+\draw (16,16.5) to[D] (17.75,16.5);
+\draw (16,16.5) to[D] (14.25,16.5);
+\draw (16,17.5) to[R,l={ \large $R_3$}] (14.25,17.5);
+\draw (16,17.5) to[R,l={ \large $R_3$}] (17.75,17.5);
+\draw (17.75,17.5) to[R,l={ \large $R_4$}] (19.25,17.5);
+\draw (14.25,17.5) to[R,l={ \large $R_4$}] (12.5,17.5);
+\draw (14.25,17.5) to[short] (14.25,16.5);
+\draw (17.75,17.5) to[short] (17.75,16.5);
+\draw (16,16.5) to[short] (16,15.25);
+\draw (16,17.5) to[short] (16,18.25);
+\draw (16,18.25) to[short] (19,18.25);
+\draw (19,18.25) to[short] (19,15);
+\node at (16,15.25) [circ] {};
+\node at (16,14) [circ] {};
+\node at (19,15.25) [circ] {};
+\draw (12.5,17.5) to[short] (12.5,18.75);
+\draw (19.25,17.5) to[short] (19.25,18.75);
+\draw (12.25,18.75) to[short] (12.75,18.75);
+\draw (19,18.75) to[short] (19.5,18.75);
+\node [font=\large] at (12.25,19) {$V_{CC}$};
+\node [font=\large] at (19.25,19) {$V_{EE}$};
+\end{circuitikz}
+}%
+
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+\section{后记}
+
+\begin{frame}{后记}
+感谢大家前来听课！祝大家考试顺利！
+
+以及求一个好评。
+\begin{figure}
+    \centering
+    \includegraphics[width=0.3\textwidth]{figures/QRcode.png}
+\end{figure}
+
+    本讲义参考了李国林老师的课件和教材、范宇辰学长的小班辅导等资料，在此表示诚挚的感谢。
+
+    本讲义在github开源：\href{https://github.com/CBDT-JWT/Circuit-BasicsNotes}{https://github.com/CBDT-JWT/Circuit-BasicsNotes} 欢迎大家前往star或提issue。
+
+    实时更新的下载链接：\href{https://www.weitao-jiang.cn/pdf_viewer.html?path=uploads\%2Fmain_1766138928.pdf\&title=电电A2小班辅导讲义}{https://www.weitao-jiang.cn}  
 \end{frame}
 \end{document}
