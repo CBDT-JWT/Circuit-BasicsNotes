@@ -1,0 +1,385 @@
+\documentclass{ctexart}
+\usepackage{circuitikz}
+\usepackage{graphicx} % 插入图片
+\usepackage{booktabs} % 表格
+\usepackage{amssymb,amsmath} % 数学符号
+\usepackage{mathrsfs} % 数学花体字母
+\usepackage{hyperref} % 超链接
+\usepackage{geometry}
+\geometry{a4paper,scale=0.8}
+% 全局设置 circuitikz 电阻样式为 European
+\ctikzset{resistor = european}
+% 全局设置 circuitikz 电感样式为 American
+\ctikzset{inductor = american}
+% 全局设置 MOS 管样式：箭头、没有圆圈
+\ctikzset{tripoles/mos style=arrows}
+% \ctikzset{tripoles/mos style=american}
+\title{一道例题的解答}
+\author{\href{www.weitao-jiang.cn}{江玮陶}}
+\begin{document}
+\maketitle
+\section{例题}
+
+\subsection*{（a）传递函数与标准形式（7 分）}
+小明设计了如图所示的二阶有源 RC 滤波器，假设运放为理想运放。
+以 $v_s(t)$ 为输入，以 $v_o(t)$ 为输出，给出详细的分析过程，最终获得该二阶滤波器的相量域传递函数并整理为标准形态
+\[
+H(s)=\dfrac{v_o}{v_s}=H_0\dfrac{\cdots}{s^2+2\xi\omega_0 s+\omega_0^2},\qquad s=j\omega .
+\]
+由传递函数形态说明小明设计的滤波器类型是哪种，并给出该二阶滤波器的系统参量 $\xi,\ \omega_0,\ H_0$ 和图示电路参量的关系式。
+
+\subsection*{（b）系统方程法：起振条件与振荡频率（3 分）}
+当小明对该电路进行调试时，发现改变 $R_f$ 电阻阻值时，出现无需输入（$v_s(t)=0$）就有以正弦波形的 $v_o(t)$ 输出的现象。
+经分析，小明认为这是由于系统参量阻尼系数 $\xi<0$ 导致二阶系统的特征根进入特征根平面的右半平面而不稳定，
+从而把该电路的自激振荡起振条件确定为 $\xi<0$。
+请说明小明调试电路参量时，$R_f$ 和 $R_r$ 满足了什么关系式，从而导致他设计的滤波器电路无需输入就可以有自激振荡输出。
+小明最终确认该振荡器的振荡频率就是二阶系统的系统自由振荡频率，
+\[
+\omega_{\mathrm{osc}}=\omega_0 .
+\]
+请确认这种用系统函数（系统方程）法获得的、用电路参量表述的振荡频率和起振条件表达式。
+
+\subsection*{（c）正反馈原理法：相位与幅度条件（12 分）}
+既然该电路已经自激振荡，小明希望从正反馈振荡器角度分析该电路。
+首先将 $v_s(t)$ 置零（短路处理），找到图示电路中的理想受控源，其余所有电路元件归入到反馈网络中；
+用正反馈原理中的起振条件 $AF>1$，
+由其相位条件获得振荡频率 $\omega_{\mathrm{osc}}$ 表达式，
+由其幅度条件获得 $R_f$ 和 $R_r$ 之间的关系式。
+
+\subsection*{（d）负阻原理法：端口等效与虚实部条件（9 分）}
+小明还希望能够从负阻原理解释该振荡电路。
+他首先将 $C_1$ 电容抽取出来，对图示虚线所示的单端口进行加流求压（或加压求流）测试，获得端口等效阻抗 $Z_{\mathrm{in}}$（或端口等效导纳 $Y_{\mathrm{in}}$）。
+从 $C_1$ 与 $Z_{\mathrm{in}}$（或 $Y_{\mathrm{in}}$）对接后形成的串联总阻抗（或并联总导纳）的虚部条件获得振荡频率 $\omega_{\mathrm{osc}}$ 表达式，
+由其实部条件获得 $R_f$ 和 $R_r$ 之间满足的关系式。
+
+\subsection*{（e）三种方法等价性与数值代入（5 分）}
+小明对比了（b）系统方程法、（c）正反馈原理、（d）负阻原理三种振荡起振分析结论，请帮助他确认三种分析方法是等价的。
+并将小明设计参量
+\[
+R_1=3.3\,\mathrm{k}\Omega,\quad C_1=0.1\,\mu\mathrm{F},\quad
+R_2=1\,\mathrm{k}\Omega,\quad C_2=0.1\,\mu\mathrm{F},\quad
+R_r=1\,\mathrm{k}\Omega
+\]
+代入，说明小明取 $R_f$ 多大时将导致该电路自激振荡，输出正弦波的振荡频率为多少 Hz？
+
+\begin{figure}[h!]
+    \centering
+\resizebox{0.5\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (23.25,12.25) node[op amp,scale=1, yscale=-1 ] (opamp2) {};
+\draw (opamp2.+) to[short] (21.75,12.75);
+\draw  (opamp2.-) to[short] (21.75,11.75);
+\draw (24.45,12.25) to[short](24.75,12.25);
+\draw (24.5,12.25) to[R,l={ \large $R_f$}] (24.5,10.5);
+\draw (24.5,10.5) to[R,l={ \large $R_r$}] (24.5,9.25);
+\node at (24.5,12.25) [circ] {};
+\draw (24.75,12.25) to[short, -o] (25.25,12.25) ;
+\draw (21.75,11.75) to[short] (21.75,10.75);
+\draw (21.75,10.75) to[short] (24.5,10.75);
+\node at (24.5,10.75) [circ] {};
+\draw (24.5,9.25) to (24.5,9) node[sground]{};
+\draw (21.75,12.75) to[short] (20.75,12.75);
+\draw (20.75,12.75) to[R,l={ \large $R_2$}] (20.75,10.5);
+\draw (20.75,10.5) to (20.75,10.25) node[sground]{};
+\draw (20.75,12.75) to[C,l={ \large $C_2$}] (19,12.75);
+\draw (19,12.75) to[C,l={ \large $C_1$}] (17.25,12.75);
+\draw (17.25,12.75) to[american voltage source,l={ \large $v_s$}] (17.25,10.75);
+\draw (17.25,10.75) to (17.25,10.5) node[sground]{};
+\draw (19,12.75) to[short] (19,13.75);
+\draw (19,13.75) to[short] (20.25,13.75);
+\draw (24.5,12.25) to[short] (24.5,13.75);
+\draw (20.25,13.75) to[R,l={ \large $R_1$}] (24.5,13.75);
+\node [font=\large] at (25.75,12.5) {$v_o$};
+\draw [line width=1pt, dashed] (18.75,14) -- (18.75,10.25);
+\draw [->, >=Stealth] (18.25,10.75) -- (19.25,10.75);
+\draw [short] (18.25,10.75) -- (18.25,9.25);
+\node [font=\large] at (18.75,9.75) {$Z_{in}$};
+\end{circuitikz}
+}%
+\end{figure}
+\section{解答}
+\subsection{传递函数求解}
+\begin{figure}[h!]
+    \centering
+\resizebox{0.5\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (23.25,12.25) node[op amp,scale=1, yscale=-1 ] (opamp2) {};
+\draw (opamp2.+) to[short] (21.75,12.75);
+\draw  (opamp2.-) to[short] (21.75,11.75);
+\draw (24.45,12.25) to[short](24.75,12.25);
+\draw (24.5,12.25) to[R,l={ \large $R_f$}] (24.5,10.5);
+\draw (25.8,10.5)node[]{$\dfrac{R_r}{R_f+R_r}V_o$};
+\draw (24.5,10.5) to[R,l={ \large $R_r$}] (24.5,9.25);
+\node at (24.5,12.25) [circ] {};
+\draw (24.75,12.25) to[short, -o] (25.25,12.25) ;
+\draw (21.75,11.75) to[short] (21.75,10.75);
+\draw (21.75,10.75) to[short] (24.5,10.75);
+\node at (24.5,10.75) [circ] {};
+\draw (24.5,9.25) to (24.5,9) node[sground]{};
+\draw (21.75,12.75) to[short] (20.75,12.75);
+\draw (20.75,12.75) to[R,l={ \large $R_2$},i=$I_{R_2}$] (20.75,10.5);
+\draw (20.75,10.5) to (20.75,10.25) node[sground]{};
+\draw (20.75,12.75) to[C,l={ \large $C_2$}] (19,12.75);
+\draw (17.25,12.75) to[C,l={ \large $C_1$},i=$I_{C_1}$] (19,12.75);
+\draw (19,12.5)node[]{$v_x$};
+\draw (17.25,12.75) to[american voltage source,l={ \large $v_s$}] (17.25,10.75);
+\draw (17.25,10.75) to (17.25,10.5) node[sground]{};
+\draw (19,12.75) to[short] (19,13.75);
+\draw (19,13.75) to[short] (20.25,13.75);
+\draw (24.5,12.25) to[short] (24.5,13.75);
+\draw (20.25,13.75) to[R,l={ \large $R_1$},i=$I_{R_1}$] (24.5,13.75);
+\node [font=\large] at (25.75,12.5) {$v_o$};
+\end{circuitikz}
+}%
+\end{figure}  
+$$
+\begin{aligned}
+    I_{R_2}&=\dfrac{R_r}{(R_f+R_r)R_2}v_o=I_{C_2}
+    \end{aligned}
+$$  
+$$
+\begin{aligned}
+    v_x&=\dfrac{R_2+\dfrac{1}{sC_2}}{R_2}\times\dfrac{R_r}{R_r+R_f}v_o
+    \end{aligned}
+$$  
+$$
+\begin{aligned}
+    I_{C_1}&=(v_s-v_x)sC_1=\left(v_s-\dfrac{1+sC_2R_2}{sC_2R_2}\times\dfrac{R_r}{R_f+R_r}v_o\right)sC1\\
+    &=sC_1v_s-\dfrac{1+sC_2R_2}{(C_2/C_1)R2}\times\dfrac{R_r}{R_f+R_r}v_o
+    \end{aligned}
+$$  
+$$
+\begin{aligned}
+    I_{R_1}&=\dfrac{1}{R_1}(v_o-v_x)=\left(\dfrac{sC_2R_2+1}{sC_2R_1R_2}\times\dfrac{R_r}{R_f+R_r}-\dfrac{1}{R_1}\right)v_o\\
+\end{aligned}
+$$
+利用x节点KCL$I_{R_1}+I_{R_2}=I_{C_1}$，整理得
+$$
+\begin{aligned}
+H(s)&=\dfrac{v_o}{v_s}\\
+&=\dfrac{sC_1}{\dfrac{1+sC_2R_2}{sC_2R_1R_2}\times\dfrac{R_r}{R_f+R_r}-\dfrac{1}{R_1}+\dfrac{R_r}{R_f+R_r}\times\dfrac{1}{R_2}+\dfrac{1+sC_2R_2}{(C_2/C_1)R2}\times\dfrac{R_r}{R_f+R_r}}\\
+&\underset{F:=1+\dfrac{R_f}{R_r}}{=}F\dfrac{sC_1}{\dfrac{sC_2R_2+1}{sC_2R_1R_2}-\dfrac{1}{R_1}F+\dfrac{1}{R_2}+\dfrac{sC_2R_2+1}{C_2/C_1R_2}}\\
+&=F\dfrac{s^2}{s^2+s\left(\dfrac{1}{R_1C_1}-F\dfrac{1}{R_1C_1}+\dfrac{1}{R_2C_2}+\dfrac{1}{R_2C_1}\right)+\dfrac{1}{R_1R_2C_1C_2}}
+    \end{aligned}
+$$
+是高通系统。系统参量为
+$$
+\begin{cases}
+    \omega_0=\dfrac{1}{\sqrt{R_1R_2C_1C_2}}\\
+    \xi=\dfrac{1}{2\omega_0}\left(\dfrac{1}{R_1C_1}-F\dfrac{1}{R_1C_1}+\dfrac{1}{R_2C_2}+\dfrac{1}{R_2C_1}\right)\\
+    H_0=F=1+\dfrac{R_f}{R_r}
+\end{cases}
+$$
+\subsection{利用系统方程法求解起振条件和振荡频率}
+起振条件$\xi<0$，即
+$$
+\begin{aligned}
+    &\dfrac{1}{R_1C_1}-F\dfrac{1}{R_1C_1}+\dfrac{1}{R_2C_2}+\dfrac{1}{R_2C_1}<0\\
+    \Rightarrow &F>\left(\dfrac{1}{R_1C_1}+\dfrac{1}{R_2C_2}+\dfrac{1}{R_2C_1}\right)\Big/\dfrac{1}{R_1C_1}\\
+    &=1+\dfrac{R_1}{R_2}+\dfrac{R_1C_1}{R_2C_2}\\
+\end{aligned}
+$$
+振荡频率即为$\omega_{osc}=\omega_0=\dfrac{1}{\sqrt{R_1R_2C_1C_2}}$。
+\subsection{利用正反馈原理法求解起振条件和振荡频率}
+拆出放大网络为
+\begin{figure}[!h]
+\centering
+\resizebox{0.3\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+\draw (9.75,15.25) node[op amp,scale=1, yscale=-1 ] (opamp2) {};
+\draw (opamp2.+) to[short] (8.25,15.75);
+\draw  (opamp2.-) to[short] (8.25,14.75);
+\draw (10.95,15.25) to[short](11.25,15.25);
+\draw (8.25,15.75) to[short, -o] (7,15.75) ;
+\draw (11.25,15.25) to[R,l={ \LARGE $R_f$}] (11.25,13.25);
+\draw (11.25,13.25) to[R,l={ \LARGE $R_r$}] (11.25,11.5);
+\node at (11.25,13.25) [circ] {};
+\draw (11.25,13.25) to[short] (8.25,13.25);
+\draw (8.25,13.25) to[short] (8.25,14.75);
+\draw (11.25,15.25) to[short, -o] (12.5,15.25) ;
+\draw (11.25,11.5) to (11.25,11.25) node[sground]{};
+\node [font=\LARGE] at (6.5,15.75) {$v_i$};
+\node [font=\LARGE] at (13,15.5) {$v_o$};
+\end{circuitikz}
+}%
+\end{figure}
+
+运算放大器的理想型保证了该放大器为理想压控压源。其电压增益为
+$$
+A=\dfrac{v_o}{v_i}=1+\dfrac{R_f+R_r}{R_r}
+$$
+
+拆出反馈网络为
+
+\begin{figure}[!h]
+\centering
+\resizebox{0.3\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\LARGE]
+
+\draw (10,15.5) to[C,l={ \LARGE $C_1$}] (10,13.5);
+\draw (10,15.5) to[european resistor,l={ \LARGE $R_1$}] (7.5,15.5);
+\draw (10,15.5) to[C,l={ \LARGE $C_2$}] (12.5,15.5);
+\draw (12.5,15.5) to[european resistor,l={ \LARGE $R_2$}] (12.5,13.5);
+\draw (12.5,15.5) to[short, -o] (13.75,15.5) ;
+\draw (7.5,15.5) to[short, -o] (7,15.5) ;
+\draw (10,13.5) to (10,13.25) node[sground]{};
+\draw (12.5,13.5) to (12.5,13.25) node[sground]{};
+\end{circuitikz}
+}%
+\end{figure}
+
+其ABCD矩阵为
+$$
+\begin{aligned}
+ABCD&=\begin{bmatrix}
+    1 & R_1 \\
+    0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+    1 & 0\\
+    sC_1 & 1
+\end{bmatrix}
+\begin{bmatrix}
+    1 & 1/sC_1\\
+    0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+    1 & 0 \\
+    1/R_2 & 1
+\end{bmatrix}\\
+&=\begin{bmatrix}
+    1+sC_1R_1 & R_1\\
+    \ast & \ast 
+\end{bmatrix}
+\begin{bmatrix}
+    1+1/(sC_2R_2) & \ast\\
+    1/R_2 & \ast
+\end{bmatrix}\\
+&=\begin{bmatrix}
+    1+sC_1R_1+\dfrac{1}{sC_2R_2}+\dfrac{C_1R_1}{C_2R_2}+\dfrac{R_1}{R_2}& \ast\\
+    \ast & \ast
+\end{bmatrix}
+\end{aligned}
+$$
+
+其传递函数为
+$$
+\begin{aligned}
+    H(s)&=\frac{1}{A}=\dfrac{sC_2R_2}{s^2(C_1R_1C_2R_2)+1+\left(\frac{R_1}{R_2}\left(1+\frac{C_1}{C_2}\right)+1\right)sC_2R_2}\\
+    &=\frac{\dfrac{1}{C_1}{R_1}s}{s^2+\frac{1}{C_1R_1}\left(\frac{R_1}{R_2}+\frac{C_1R_1}{C_2R_2}+1\right)s+\dfrac{1}{C_1R_1C_2R_2}}\\
+    &=\frac{1}{1+\dfrac{R_1}{R_2}+\dfrac{C_1R_1}{C_2R_2}}\times\frac{\left(\dfrac{1}{C_1R_2}+\dfrac{1}{C_2R_2}+\dfrac{1}{C_1R_1}\right)s}{s^2+\left(\dfrac{1}{C_1R_2}+\dfrac{1}{C_2R_2}+\dfrac{1}{C_1R_1}\right)s+\dfrac{1}{C_1R_1C_2R_2}}
+\end{aligned}
+$$
+
+起振条件$AF>1$，即
+$$
+\begin{aligned}
+    &\left(1+\dfrac{R_f}{R_r}\right)\dfrac{1}{1+\dfrac{R_1}{R_2}+\dfrac{C_1R_1}{C_2R_2}}>1\\
+    \Rightarrow &\dfrac{R_f}{R_r}> \dfrac{R_1}{R_2}+\dfrac{C_1R_1}{C_2R_2}
+\end{aligned}
+$$
+
+相位条件$\varphi(\omega_{osc})=0$，即
+$$
+-\omega_{osc}^2+\frac{1}{R_1C_1R_2C_2}=0\Rightarrow \omega_{osc}=\dfrac{1}{\sqrt{R_1R_2C_1C_2}}
+$$
+\subsection{利用负阻原理法求解起振条件和振荡频率}
+\begin{figure}[h!]
+    \centering
+\resizebox{0.5\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\large]
+\draw (23.25,12.25) node[op amp,scale=1, yscale=-1 ] (opamp2) {};
+\draw (opamp2.+) to[short] (21.75,12.75);
+\draw  (opamp2.-) to[short] (21.75,11.75);
+\draw (24.45,12.25) to[short](24.75,12.25);
+\draw (24.5,12.25) to[R,l={ \large $R_f$}] (24.5,10.5);
+\draw (25.8,10.5)node[]{$\dfrac{R_r}{R_f+R_r}V_o$};
+\draw (24.5,10.5) to[R,l={ \large $R_r$}] (24.5,9.25);
+\node at (24.5,12.25) [circ] {};
+\draw (24.75,12.25) to[short, -o] (25.25,12.25) ;
+\draw (21.75,11.75) to[short] (21.75,10.75);
+\draw (21.75,10.75) to[short] (24.5,10.75);
+\node at (24.5,10.75) [circ] {};
+\draw (24.5,9.25) to (24.5,9) node[sground]{};
+\draw (21.75,12.75) to[short] (20.75,12.75);
+\draw (20.75,12.75) to[R,l={ \large $R_2$},i=$I_{R_2}$] (20.75,10.5);
+\draw (20.75,10.5) to (20.75,10.25) node[sground]{};
+\draw (20.75,12.75) to[C,l={ \large $C_2$}] (19,12.75);
+% \draw (17.25,12.75) to[C,l={ \large $C_1$},i=$I_{C_1}$] (19,12.75);
+\draw (19,12.5)node[]{$V_{test}$};
+% \draw (17.25,12.75) to[american voltage source,l={ \large $v_s$}] (17.25,10.75);
+% \draw (17.25,10.75) to (17.25,10.5) node[sground]{};
+\draw (19,12.75) to[short] (19,13.75);
+\draw (19,13.75) to[short] (20.25,13.75);
+\draw (24.5,12.25) to[short] (24.5,13.75);
+\draw (20.25,13.75) to[R,l={ \large $R_1$},i=$I_{R_1}$] (24.5,13.75);
+\node [font=\large] at (25.75,12.5) {$v_o$};
+\end{circuitikz}
+}%
+\end{figure}  
+
+$$
+I_{R_2}=\frac{1}{R_2}v_o\frac{R_r}{R_f+R_r}=I_{C_2}
+$$
+
+$$
+I_{R_1}=(V_{test}-v_o)\big/R_1
+$$
+
+$$
+V_{test}=\frac{R_2+\frac{1}{sC_2}}{R_2}\times\frac{R_r}{R_f+R_r}v_o\Rightarrow v_o=\frac{R_f+R_r}{R_r}\frac{R_2}{R_2+\frac{1}{sC_2}}V_{test}
+$$
+
+$$
+\begin{aligned}
+    I_{test}&=\frac{V_{test}}{R_1}+v_o\left(\frac{1}{F}\times\frac{1}{R_2}-\frac{1}{R_1}\right)\quad\,,F=\frac{R_f+R_r}{R_r}\\
+    &=\left(\frac{1}{R_1}+\frac{1}{R_2+\dfrac{1}{sC_2}-\frac{FR_2}{R_1\left(R_2+\dfrac{1}{sC_2}\right)}}\right)V_{test}\\
+    &=\frac{R_2+\dfrac{1}{sC_2}+R_1-FR_2}{R_1\left(R_2+R_2+\dfrac{1}{sC_2}\right)}V_{test}
+    \Rightarrow Y_{in}=\boxed{\frac{R_2+\dfrac{1}{sC_2}+R_1-FR_2}{R_1\left(R_2+R_2+\dfrac{1}{sC_2}\right)}}
+\end{aligned}
+$$
+整理得到
+$$
+Y_{in}=\frac{1+sC_2(R_1+R_2-FR_2)}{R_1+sC_2R_2R_1}
+$$
+因此
+$$
+Y=Y_{in}+sC_1=\frac{1+sC_2(R_1+R_2-FR_2)+sC_1R_1+s^2C_1C_2R_1R_2}{R_1+sC_2R_2R_1}
+$$
+分母共轭实化得到
+$$
+\begin{aligned}
+Y&=\frac{(R_1-sC_2R_1R_2)(1+sC_2(R_1+R_2-FR_2)+sC_1R_1+s^2C_1C_2R_1R_2)}{R_1^2-s^2C_2^2R_1^2R_2^2}\\
+&=\frac{s^3(-C_2^2C_1R_1^2R_2^2)+s^2(-C_2^2R_1R_2\left(R_1+R_2-FR_2\right))+s(C_2R_1^2+C_1R_1^2-FC_2R_1R_2)}{R_1^2-s^2C_2^2R_1^2R_2^2}
+\end{aligned}
+$$
+虚部条件
+$$
+-j\omega^3(-C_2^2C_1R_1^2R_2^2)+j\omega(C_2R_1^2-FC_2R_1R_2)=0
+$$
+$$
+\therefore \omega=\frac{\sqrt{F-\dfrac{R_1}{R_2}-\dfrac{C_1R_1}{C_2R_2}}}{\sqrt{C_1C_2R_1R_2}} \quad(\ast)
+$$
+实部条件
+$$
+R_1+C_2^2R_1R_2(R_1+R_2-FR_2)\omega^2=0
+$$
+带入$(\ast)$，得到
+$$
+R_1+C_2^2R_1R_2(R_1+R_2-FR_2)\frac{F-\dfrac{R_1}{R_2}-\dfrac{C_1R_1}{C_2R_2}}{C_1C_2R_1R_2}=0
+$$
+解得
+$$
+F=1+\frac{R_1}{R_2}+\frac{C_1R_1}{C_2R_2}
+$$
+$$
+\omega_{osc}=\frac{1}{\sqrt{C_1C_2R_1R_2}}
+$$
+\subsection{三种方法等价性与数值代入}
+略
+\end{document}
